@@ -8,8 +8,6 @@
 namespace hop_hash
 {
 
-	const size_t BUCKET_SIZE = 4;
-
 	struct Bucket
 	{
 		std::bitset<BUCKET_SIZE> bitmap;

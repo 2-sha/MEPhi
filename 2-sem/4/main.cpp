@@ -45,6 +45,12 @@ vector<string> actionsNames = {
 
 int main()
 {
+	//hop_hash::add(5, new Item(5, 1, "a"));
+	//hop_hash::add(6, new Item(6, 2, "b"));
+	//hop_hash::add(7, new Item(7, 3, "c"));
+	//hop_hash::add(8, new Item(8, 4, "f"));
+	//hop_hash::add(37, new Item(37, 5, "e"));
+
 	setlocale(LC_ALL, "");
 	gui.setWindowTitle("Хэш-таблица");
 	gui.updateStatus("Статус: таблица пуста");
@@ -99,7 +105,6 @@ void openFromFile()
 		Item *item = new Item;
 		file.read((char*)&item->hopKey, sizeof item->hopKey);
 		file.read((char*)&item->sumKey, sizeof item->sumKey);
-		file.read((char*)&item->sumId, sizeof item->sumId);
 		size_t tmp = 0;
 		file.read((char*)&tmp, sizeof tmp);
 		for (size_t j = 0; j < tmp; j++)
@@ -146,15 +151,14 @@ void saveToFile()
 	file.write((char*)&size, sizeof size);
 	for (size_t i = 0; i < SIZE; i++)
 	{
-		if (sum_hash::table[i] != nullptr)
+		if (sum_hash::table[i].item != nullptr)
 		{
 			size++;
-			file.write((char*)&sum_hash::table[i]->hopKey, sizeof sum_hash::table[i]->hopKey);
-			file.write((char*)&sum_hash::table[i]->sumKey, sizeof sum_hash::table[i]->sumKey);
-			file.write((char*)&sum_hash::table[i]->sumId, sizeof sum_hash::table[i]->sumId);
-			size_t tmp = sum_hash::table[i]->info.size();
+			file.write((char*)&sum_hash::table[i].item->hopKey, sizeof sum_hash::table[i].item->hopKey);
+			file.write((char*)&sum_hash::table[i].item->sumKey, sizeof sum_hash::table[i].item->sumKey);
+			size_t tmp = sum_hash::table[i].item->info.size();
 			file.write((char*)&tmp, sizeof tmp);
-			for (auto it : sum_hash::table[i]->info)
+			for (auto it : sum_hash::table[i].item->info)
 			{
 				file.write((char*)&it.ver, sizeof it.ver);
 				size_t strSize = it.info.size();

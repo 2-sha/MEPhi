@@ -4,6 +4,8 @@
 #include <list>
 
 const size_t SIZE = 32;
+const size_t SUM_STEP = 3;
+const size_t BUCKET_SIZE = 4;
 
 struct Version
 {
@@ -16,7 +18,6 @@ struct Version
 struct Item
 {
 	size_t hopKey, sumKey;
-	size_t sumId;
 	std::list<Version> info;
 
 	Item(const size_t hopKey, const size_t sumKey, const std::string &info)
