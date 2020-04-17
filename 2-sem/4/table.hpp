@@ -6,6 +6,8 @@
 const size_t SIZE = 32;
 const size_t SUM_STEP = 3;
 const size_t BUCKET_SIZE = 4;
+const char* SUM_FILE = "sum_hash";
+const char* HOP_FILE = "hop_hash";
 
 struct Version
 {

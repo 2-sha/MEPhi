@@ -1,6 +1,9 @@
-﻿#include <vector>
+﻿#define IN_RAM
+
+#include <vector>
 #include <string>
 #include <exception>
+#include <algorithm>
 #include <utility>
 #include <functional>
 #include <fstream>
@@ -24,40 +27,26 @@ bool isNumber(const std::string& s)
 	return !s.empty() && (s.find_first_not_of("0123456789") == s.npos);
 }
 
-vector<function<void()>> actions = { 
-	openFromFile,
-	fillTable,
-	printTable,
-	addItem,
-	findItem,
-	removeItem,
-};
-
-vector<string> actionsNames = {
-	"Открыть из файла",
-	"Автоматически заполнить таблицу",
-	"Вывести таблицу",
-	"Добавить элемент",
-	"Найти элемент",
-	"Удалить элемент",
-	"Выйти",
+vector<pair<string, function<void()>>> actions = {
+	{ "Автоматически заполнить таблицу", fillTable },
+	{ "Вывести таблицу", printTable },
+	{ "Добавить элемент", addItem },
+	{ "Найти элемент", findItem },
+	{ "Удалить элемент", removeItem },
+	{ "Выйти", []() { exit(0); }},
 };
 
 int main()
 {
-	//hop_hash::add(5, new Item(5, 1, "a"));
-	//hop_hash::add(6, new Item(6, 2, "b"));
-	//hop_hash::add(7, new Item(7, 3, "c"));
-	//hop_hash::add(8, new Item(8, 4, "f"));
-	//hop_hash::add(37, new Item(37, 5, "e"));
-
 	setlocale(LC_ALL, "");
 	gui.setWindowTitle("Хэш-таблица");
-	gui.updateStatus("Статус: таблица пуста");
 
 	bool isRunning = true;
 	while (isRunning)
 	{
+		vector<string> actionsNames;
+		for (auto it : actions)
+			actionsNames.push_back(it.first);
 		size_t choise = gui.printMenu(actionsNames);
 
 		if (choise == actions.size())
@@ -68,7 +57,7 @@ int main()
 		{
 			try
 			{
-				actions[choise]();
+				actions[choise].second();
 			}
 			catch (std::bad_alloc ex)
 			{
@@ -82,98 +71,6 @@ int main()
 	}
 
 	return 0;
-}
-
-void openFromFile()
-{
-	std::vector<std::pair<std::string, bool>> input = gui.printInputMenu({
-		make_pair("Назад", 0),
-		make_pair("Файл (относительный путь)", 1),
-		make_pair("Открыть", 0),
-	});
-
-	if (input[0].second)
-		return;
-
-	fstream file(input[1].first, ios::binary | ios::in);
-	if (!file.is_open())
-		throw invalid_argument("Невозможно открыть файл");
-	size_t size = 0;
-	file.read((char*)&size, sizeof size);
-	for (size_t i = 0; i < size; i++)
-	{
-		Item *item = new Item;
-		file.read((char*)&item->hopKey, sizeof item->hopKey);
-		file.read((char*)&item->sumKey, sizeof item->sumKey);
-		size_t tmp = 0;
-		file.read((char*)&tmp, sizeof tmp);
-		for (size_t j = 0; j < tmp; j++)
-		{
-			Version info;
-			size_t strSize = 0;
-			file.read((char*)&info.ver, sizeof info.ver);
-			file.read((char*)&strSize, sizeof strSize);
-			char *buffer = new char[strSize + 1];
-			file.read(buffer, strSize);
-			buffer[strSize] = 0;
-			info.info = buffer;
-			delete[] buffer;
-			item->info.push_back(info);
-		}
-		hop_hash::add(item->hopKey, item);
-		sum_hash::add(item->sumKey, item);
-	}
-	file.close();
-
-	gui.updateStatus("Статус: сохранено");
-	actions[0] = saveToFile;
-	actionsNames[0] = "Сохранить в файл";
-	actions.erase(actions.begin() + 1);
-	actionsNames.erase(actionsNames.begin() + 1);
-	gui.showPopup("Успешно!", "Таблица загружена");
-}
-
-void saveToFile()
-{
-	std::vector<std::pair<std::string, bool>> input = gui.printInputMenu({
-		make_pair("Назад", 0),
-		make_pair("Файл (относительный путь)", 1),
-		make_pair("Сохранить", 0),
-	});
-
-	if (input[0].second)
-		return;
-
-	ofstream file(input[1].first, ios::binary | ios::out);
-	if (!file.is_open())
-		throw invalid_argument("Невозможно создать файл");
-	size_t size = 0;
-	file.write((char*)&size, sizeof size);
-	for (size_t i = 0; i < SIZE; i++)
-	{
-		if (sum_hash::table[i].item != nullptr)
-		{
-			size++;
-			file.write((char*)&sum_hash::table[i].item->hopKey, sizeof sum_hash::table[i].item->hopKey);
-			file.write((char*)&sum_hash::table[i].item->sumKey, sizeof sum_hash::table[i].item->sumKey);
-			size_t tmp = sum_hash::table[i].item->info.size();
-			file.write((char*)&tmp, sizeof tmp);
-			for (auto it : sum_hash::table[i].item->info)
-			{
-				file.write((char*)&it.ver, sizeof it.ver);
-				size_t strSize = it.info.size();
-				file.write((char*)&strSize, sizeof strSize);
-				const char *str = it.info.c_str();
-				file.write(str, strSize);
-			}
-		}
-	}
-	file.seekp(file.beg);
-	file.write((char*)&size, sizeof size);
-	file.close();
-
-	gui.updateStatus("Статус: сохранено");
-	gui.showPopup("Успешно!", "Таблица сохранена");
 }
 
 void printTable()
@@ -233,11 +130,14 @@ void fillTable()
 	hop_hash::add(5, item);
 	sum_hash::add(13, item);
 
-	gui.updateStatus("Статус: есть изменения");
-	actions[0] = saveToFile;
-	actionsNames[0] = "Сохранить в файл";
-	actions.erase(actions.begin() + 1);
-	actionsNames.erase(actionsNames.begin() + 1);
+	for (size_t i = 0; i < actions.size(); i++)
+	{
+		if (actions[i].first == "Автоматически заполнить таблицу")
+		{
+			actions.erase(actions.begin() + i);
+			break;
+		}
+	}
 	gui.showPopup("Успешно!", "Таблица заполнена");
 }
 
@@ -278,14 +178,6 @@ void addItem()
 		hopTtem->add(input[3].first);
 	}
 
-	actions[0] = saveToFile;
-	actionsNames[0] = "Сохранить в файл";
-	gui.updateStatus("Статус: есть изменения");
-	if (actionsNames[1] == "Автоматически заполнить таблицу")
-	{
-		actions.erase(actions.begin() + 1);
-		actionsNames.erase(actionsNames.begin() + 1);
-	}
 	gui.showPopup("Успешно!", "Элемент добавлен");
 }
 
@@ -354,7 +246,7 @@ void removeItem()
 		"Назад",
 		"Перемешивание hopscotch",
 		"Перемешивание сложением",
-		});
+	});
 
 	if (type == 0)
 		return;
@@ -406,6 +298,5 @@ void removeItem()
 			throw std::out_of_range("Указанная версия не найдена");
 	}
 
-	gui.updateStatus("Статус: есть изменения");
 	gui.showPopup("Успешно!", "Элемент удалён");
 }
