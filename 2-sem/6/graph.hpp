@@ -200,7 +200,7 @@ public:
                         agnode(g, (char*)std::to_string(j).c_str(), TRUE), NULL, TRUE);
                     graphviz::agset(edge, (char*)"label", (char*)(
                         std::to_string((int)matrix[i][j]) + "." + std::to_string((int)(matrix[i][j] * 100) % 100)
-                        ).c_str());
+                    ).c_str());
                 }
             }
         }
@@ -212,22 +212,100 @@ public:
         graphviz::gvFreeContext(gvc);
     }
 
-    std::vector<std::vector<double>> findShortcuts()
+    std::vector<std::pair<int, double>> dijkstra(int source, int sink, const std::vector<std::vector<double>> &matrix)
     {
-        std::vector<std::vector<double>> res = matrix;
+        std::vector<double> tops(matrix.size(), DBL_MAX);
+        std::vector<int> parents(matrix.size(), DBL_MAX);
+        std::vector<bool> visited(matrix.size(), false);
+        std::vector<std::pair<int, double>> path;
 
-        for (int k = 0; k < res.size(); k++)
+        int cur = source;
+        tops[cur] = 0;
+        for (int i = 0; i < matrix.size(); i++)
         {
-            for (int i = 0; i < res.size(); i++)
+            int next = cur;
+            double minLength = DBL_MAX;
+            for (int j = 0; j < matrix.size(); j++)
             {
-                for (int j = 0; j < res.size(); j++)
+                if (visited[j] || j == cur)
+                    continue;
+                if (tops[cur] + matrix[cur][j] < tops[j])
                 {
-                    res[i][j] = min(res[i][j], res[i][k] + res[k][j]);
+                    tops[j] = tops[cur] + matrix[cur][j];
+                    parents[j] = cur;
                 }
+                if (tops[j] < minLength)
+                {
+                    minLength = tops[j];
+                    next = j;
+                }
+            }
+
+            visited[cur] = true;
+            cur = next;
+        }
+
+        path.insert(path.begin(), { sink, tops[sink] });
+        int i = 0;
+        while (sink != source)
+        {
+            if (i > tops.size())
+                throw std::invalid_argument("ѕуть не найден");
+            sink = parents[sink];
+            path.insert(path.begin(), { sink, tops[sink] });
+            i++;
+        }
+        return path;
+    }
+
+    std::vector<std::vector<std::pair<int, double>>> YenKSP(int source, int sink, int k)
+    {
+        std::vector<std::vector<double>> matrix = this->matrix;
+        std::vector<std::vector<std::pair<int, double>>> shortest;
+
+        shortest.push_back(dijkstra(source, sink, matrix));
+
+        for (int i = 1; i < k; i++)
+        {
+            for (int j = 0; j < shortest[i - 1].size() - 1; j++)
+            {
+                matrix = this->matrix;
+
+                int spurNode = shortest[i - 1][j].first;
+                std::vector<std::pair<int, double>> rootPath(shortest[i - 1].begin(), shortest[i - 1].begin() + j + 1);
+
+                for (auto path : shortest)
+                {
+                    auto subPath = search(path.begin(), path.end(), rootPath.begin(), rootPath.end());
+                    if (subPath != path.end())
+                    {
+                        subPath += rootPath.size() - 1;
+                        int a = (*subPath).first;
+                        int b = (*(subPath + 1)).first;
+                        matrix[a][b] = DBL_MAX;
+                    }
+                }
+
+                std::vector<std::pair<int, double>> totalPath = rootPath;
+                std::vector<std::pair<int, double>> spurPath;
+                try
+                {
+                    spurPath = dijkstra(spurNode, sink, matrix);
+                }
+                catch (std::invalid_argument)
+                {
+                    continue;
+                }
+                totalPath.insert(totalPath.end(), spurPath.begin() + 1, spurPath.end());
+
+                if (shortest.size() < i + 1)
+                    shortest.push_back(totalPath);
+                else if (shortest.back().back().second > totalPath.back().second)
+                    shortest[shortest.size() - 1] = totalPath;
             }
         }
 
-        return res;
+        return shortest;
     }
 
     bool isEmpty()

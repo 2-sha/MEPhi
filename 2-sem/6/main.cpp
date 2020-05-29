@@ -37,7 +37,7 @@ vector<pair<string, function<void()>>> actions = {
     { "Добавить", addElem },
     { "Найти путь", findWay },
     { "Удалить вершину", removeElem },
-    { "Таймирование", calcTiming },
+    //{ "Таймирование", calcTiming },
     { "Сохранить", save },
     { "Выйти", []() { exit(0); }},
 };
@@ -124,14 +124,20 @@ void generate()
 {
     graph.clear();
 
-    graph.addNode(2, 2, "A");
-    graph.addNode(2, 10, "B");
-    graph.addNode(5, 10, "C");
-    graph.addNode(15, 2, "D");
+    graph.addNode(5, 5, "A");
+    graph.addNode(6, 4, "C");
+    graph.addNode(7, 5, "B");
+    graph.addNode(7, 6, "E");
+    graph.addNode(8, 3, "F");
+    graph.addNode(5, 10, "D");
 
-    graph.addEdgees("A", { "B", "C", "D" });
-    graph.addEdgees("B", { "C" });
-    graph.addEdgees("D", { "C" });
+    graph.addEdgees("A", { "C", "D" });
+    graph.addEdgees("D", { "C", "E" });
+    graph.addEdgees("C", { "B", "E" });
+    graph.addEdgees("B", { "E" });
+    graph.addEdgees("E", { "F" });
+
+    gui.showPopup("Успешно!", "Граф сгенерирован");
 
     //std::vector<std::pair<std::string, bool>> input = gui.printInputMenu({
     //    { "Назад", 0 },
@@ -343,39 +349,21 @@ void findWay()
     if (names.find(input[1].first) == names.end() || names.find(input[2].first) == names.end())
         throw invalid_argument("Указанных точек не существует");
 
-    vector<vector<double>> ways = graph.findShortcuts();
     int idA = names[input[1].first];
     int idB = names[input[2].first];
-    double minDist1 = ways[idA][idB];
-    double minDist2 = DBL_MAX, minDist3 = DBL_MAX;
+    vector<vector<pair<int, double>>> ways = graph.YenKSP(names[input[1].first], names[input[2].first], 3);
+
+    vector<string> output;
     for (int i = 0; i < ways.size(); i++)
     {
-        if (i == idB)
-            continue;
-        double dist = ways[idA][i] + ways[i][idB];
-        if (minDist2 >= dist)
-        {
-            minDist3 = minDist2;
-            minDist2 = dist;
-        }
-        else if (minDist3 > dist)
-        {
-            minDist3 = dist;
-        }
+        string str = to_string(i) + ": ";
+        if (ways[i].back().second != DBL_MAX)
+            str += to_string(ways[i].back().second);
+        else
+            str += "-";
+        output.push_back(str);
     }
-    vector<string> output;
-    if (minDist1 == DBL_MAX)
-        output.push_back("Путей нет :с");
-    else
-    {
-        output.push_back("1: " + to_string(minDist1));
-        if (minDist2 != DBL_MAX && minDist2 != minDist1)
-        {
-            output.push_back("2: " + to_string(minDist2));
-            if (minDist3 != DBL_MAX)
-                output.push_back("3: " + to_string(minDist3));
-        }
-    }
+
     gui.showPopup("Выполнено!", output);
 }
 
@@ -488,7 +476,7 @@ void calcTiming()
                     addBuf += to_string(addTime) + ";";
 
                     start = clock();
-                    graph.findShortcuts();
+                    //graph.YenKSP();
                     findBuf += to_string(clock() - start) + ";";
 
                     mvwaddstr(win, 2, j, "##");
