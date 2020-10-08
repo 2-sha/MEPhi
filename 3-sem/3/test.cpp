@@ -1,0 +1,116 @@
+#include "pch.h"
+#include "../Algorithms/utils.h"
+
+TEST(Bone, testContructor)
+{
+	Bone b1;
+	ASSERT_EQ(b1.get(), std::make_pair(0, 0));
+
+	Bone b2(Bone::MAX_POINTS, Bone::MAX_POINTS);
+	ASSERT_EQ(b2.get(), std::make_pair(Bone::MAX_POINTS, Bone::MAX_POINTS ));
+
+	ASSERT_THROW(Bone(Bone::MAX_POINTS + 1, 0), std::invalid_argument);
+}
+
+TEST(Bone, testGetSet)
+{
+	Bone b;
+
+	b.set(Bone::MAX_POINTS, Bone::MAX_POINTS);
+	ASSERT_EQ(b.get(), std::make_pair(Bone::MAX_POINTS, Bone::MAX_POINTS));
+
+	ASSERT_THROW(b.set(Bone::MAX_POINTS + 1, 0), std::invalid_argument);
+}
+
+TEST(Bone, testEqualOperator)
+{
+	Bone b1(Bone::MAX_POINTS, Bone::MAX_POINTS), b2(Bone::MAX_POINTS, Bone::MAX_POINTS);
+
+	ASSERT_TRUE(b1 == b2);
+
+	b1.set(Bone::MAX_POINTS - 1, Bone::MAX_POINTS);
+	ASSERT_FALSE(b1 == b2);
+}
+
+::testing::AssertionResult isBonesUnique(const Domino &domino)
+{
+	bool isUnique = true;
+	for (int i = 0; i < domino.size(); i++)
+	{
+		Bone bone = domino[i];
+		for (int j = 0; j < domino.size(); j++)
+		{
+			if (i == j)
+				continue;
+			if (bone == domino[j])
+			{
+				isUnique = false;
+				goto END;
+			}
+		}
+	}
+
+END:
+	if (isUnique)
+		return ::testing::AssertionSuccess();
+	return ::testing::AssertionFailure();
+}
+
+TEST(Domino, testContructor)
+{
+	Domino d1(5);
+	ASSERT_TRUE(isBonesUnique(d1));
+	ASSERT_EQ(d1.size(), 5);
+	ASSERT_THROW(Domino(Domino::MAX_BONES + 1), std::overflow_error);
+
+	Domino d4(Domino::MAX_BONES);
+	ASSERT_TRUE(isBonesUnique(d4));
+	ASSERT_EQ(d4.size(), Domino::MAX_BONES);
+
+	Domino d2;
+	ASSERT_EQ(d2.size(), 0);
+
+	Domino d3 { Bone(0, Bone::MAX_POINTS), Bone(0, Bone::MAX_POINTS - 1), Bone(Bone::MAX_POINTS, 0) };
+	ASSERT_EQ(d3.size(), 3);
+	ASSERT_EQ(d3[0], Bone(0, Bone::MAX_POINTS));
+	ASSERT_EQ(d3[1], Bone(0, Bone::MAX_POINTS - 1));
+	ASSERT_EQ(d3[2], Bone(Bone::MAX_POINTS, 0));
+	ASSERT_THROW(Domino({ Bone(0, 0), Bone(0, 0) }), std::invalid_argument);
+}
+
+TEST(Domino, testBracketsOperator)
+{
+	Domino d1;
+	ASSERT_THROW(d1[0], std::out_of_range);
+
+	Domino d2{ Bone(0, Bone::MAX_POINTS), Bone(0, Bone::MAX_POINTS - 1), Bone(Bone::MAX_POINTS, 0) };
+	ASSERT_EQ(d2.size(), 3);
+	ASSERT_EQ(d2[0], Bone(0, Bone::MAX_POINTS));
+	ASSERT_EQ(d2[1], Bone(0, Bone::MAX_POINTS - 1));
+	ASSERT_EQ(d2[2], Bone(Bone::MAX_POINTS, 0));
+	ASSERT_THROW(d2[3], std::out_of_range);
+}
+
+TEST(Domino, testIncrement)
+{
+	Domino d1;
+	ASSERT_EQ((d1++).size(), 0);
+	ASSERT_EQ((++d1).size(), 2);
+
+	Domino d2(Domino::MAX_BONES);
+	ASSERT_THROW(d2++, std::overflow_error);
+}
+
+TEST(Domino, testMinus)
+{
+	Bone b(1, 2);
+	Domino d1{ b, Bone(2, 1), Bone(3, 4) };
+	d1 -= b;
+	ASSERT_EQ(d1.size(), 2);
+	ASSERT_EQ(d1[0], Bone(2, 1));
+	ASSERT_EQ(d1[1], Bone(3, 4));
+	ASSERT_THROW(d1[2], std::out_of_range);
+
+	Domino d2{ Bone(2, 1), Bone(3, 4) };
+	ASSERT_THROW(d2 -= b, std::out_of_range);
+}
