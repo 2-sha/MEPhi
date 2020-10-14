@@ -107,6 +107,30 @@ TEST(Domino, testBracketsOperator)
     ASSERT_TRUE(d3[0] == Bone(2, 2));
 }
 
+TEST(Domino, testIncrement)
+{
+    Domino d1;
+    ASSERT_EQ((d1++).size(), 0);
+    ASSERT_EQ((++d1).size(), 2);
+
+    Domino d2(Domino::MAX_BONES);
+    ASSERT_THROW(d2++, std::overflow_error);
+}
+
+TEST(Domino, testMinus)
+{
+    Bone b(1, 2);
+    Domino d1{ b, Bone(2, 1), Bone(3, 4) };
+    d1 -= b;
+    ASSERT_EQ(d1.size(), 2);
+    ASSERT_TRUE(d1[0] == Bone(2, 1));
+    ASSERT_TRUE(d1[1] == Bone(3, 4));
+    ASSERT_THROW(d1[2], std::out_of_range);
+
+    Domino d2{ Bone(2, 1), Bone(3, 4) };
+    ASSERT_THROW(d2 -= b, std::out_of_range);
+}
+
 TEST(Domino, testPlus)
 {
     Bone b(1, 2);
@@ -121,6 +145,10 @@ TEST(Domino, testSort)
 {
     Domino d{ Bone(5, 5), Bone(1, 1), Bone(3, 4), Bone(2, 2) };
     d.sort();
+    ASSERT_TRUE(d[0] == Bone(1, 1));
+    ASSERT_TRUE(d[1] == Bone(2, 2));
+    ASSERT_TRUE(d[2] == Bone(3, 4));
+    ASSERT_TRUE(d[3] == Bone(5, 5));
 }
 
 TEST(Domino, testFindScore)
@@ -129,6 +157,8 @@ TEST(Domino, testFindScore)
 
     Domino d2 = d1.findScore(7);
     ASSERT_EQ(d2.size(), 2);
+    ASSERT_TRUE(d2[0] == Bone(3, 4));
+    ASSERT_TRUE(d2[1] == Bone(4, 3));
 
     Domino d3 = d1.findScore(1);
     ASSERT_EQ(d3.size(), 0);

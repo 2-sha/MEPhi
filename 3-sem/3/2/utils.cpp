@@ -61,6 +61,46 @@ Domino Domino::findScore(int val) const
 	return newDomino;
 }
 
+Domino& Domino::operator++()
+{
+	if (size() == MAX_BONES)
+		throw std::overflow_error("Превышено максимально число костей");
+
+	bones[bonesNum++] = generateBone();
+
+	return *this;
+}
+
+Domino Domino::operator++(int)
+{
+	if (size() == MAX_BONES)
+		throw std::overflow_error("Превышено максимально число костей");
+
+	Domino tmp = *this;
+	bones[bonesNum++] = generateBone();
+
+	return tmp;
+}
+
+Domino& Domino::operator-=(const Bone& bone)
+{
+	Bone* p = std::find(bones, bones + bonesNum, bone);
+	if (p == bones + bonesNum)
+		throw std::out_of_range("Не найдена указанная кость");
+
+	int index = p - bones;
+	for (int i = index; i <= bonesNum; i++)
+	{
+		if (i == bonesNum)
+			bones[i] = Bone();
+		else
+			bones[i] = bones[i + 1];
+	}
+	bonesNum--;
+
+	return *this;
+}
+
 Domino& Domino::operator+=(const Bone& bone)
 {
 	if (size() == MAX_BONES)

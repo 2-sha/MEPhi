@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <utility>
 #include <ostream>
 #include <initializer_list>
@@ -18,6 +18,9 @@ public:
 	bool operator==(const Bone& bone) const;
 	bool operator!=(const Bone& bone) const;
 	bool operator<(const Bone& bone) const;
+
+	friend std::ostream& operator<< (std::ostream& out, const Bone& bone);
+	friend std::istream& operator>> (std::istream& in, Bone& bone);
 
 	std::pair<int, int> get();
 	void set(int left, int right);
@@ -40,7 +43,14 @@ public:
 	void sort();
 	Domino findScore(int val) const;
 
+	friend std::ostream& operator<< (std::ostream& out, const Domino& domino);
+	friend std::istream& operator>> (std::istream& in, Domino& point);
+
+	Domino& operator++();
+	Domino operator++(int);
+	Domino& operator-=(const Bone& bone);
 	Domino& operator+=(const Bone& bone);
+
 	const Bone& operator[](int n) const;
 	Bone& operator[](int n);
 
