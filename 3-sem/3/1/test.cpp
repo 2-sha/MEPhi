@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "../Algorithms/utils.h"
+using namespace lab3;
 
 TEST(Bone, testContructor)
 {
@@ -20,6 +21,7 @@ TEST(Bone, testGetSet)
     ASSERT_EQ(b.get(), std::make_pair(Bone::MAX_POINTS, Bone::MAX_POINTS));
 
     ASSERT_THROW(b.set(Bone::MAX_POINTS + 1, 0), std::invalid_argument);
+    ASSERT_THROW(b.set(-1, -1), std::invalid_argument);
 }
 
 TEST(Bone, testEqualOperator)
@@ -76,6 +78,8 @@ TEST(Domino, testContructor)
     ASSERT_EQ(d1.size(), 5);
     ASSERT_THROW(Domino(Domino::MAX_BONES + 1), std::overflow_error);
 
+    ASSERT_THROW(Domino(-1), std::invalid_argument);
+
     Domino d4(Domino::MAX_BONES);
     ASSERT_TRUE(isBonesUnique(d4));
     ASSERT_EQ(d4.size(), Domino::MAX_BONES);
@@ -101,6 +105,7 @@ TEST(Domino, testBracketsOperator)
     ASSERT_TRUE(d2[1] == Bone(0, Bone::MAX_POINTS - 1));
     ASSERT_TRUE(d2[2] == Bone(Bone::MAX_POINTS, 0));
     ASSERT_THROW(d2[3], std::out_of_range);
+    ASSERT_THROW(d2[-1], std::out_of_range);
 
     Domino d3{ Bone(0, 1), Bone(1, 1) };
     d3[0] = Bone(2, 2);
@@ -121,6 +126,10 @@ TEST(Domino, testSort)
 {
     Domino d{ Bone(5, 5), Bone(1, 1), Bone(3, 4), Bone(2, 2) };
     d.sort();
+    ASSERT_TRUE(d[0] == Bone(1, 1));
+    ASSERT_TRUE(d[1] == Bone(2, 2));
+    ASSERT_TRUE(d[2] == Bone(3, 4));
+    ASSERT_TRUE(d[3] == Bone(5, 5));
 }
 
 TEST(Domino, testFindScore)

@@ -7,50 +7,53 @@
 #include <stdexcept>
 #include <string>
 
-class Bone
+namespace lab3
 {
-private:
-	int left, right;
+	class Bone
+	{
+	private:
+		int left, right;
 
-public:
-	static constexpr int MAX_POINTS = 6;
+	public:
+		static constexpr int MAX_POINTS = 6;
 
-	bool operator==(const Bone& bone) const;
-	bool operator!=(const Bone& bone) const;
-	bool operator<(const Bone& bone) const;
+		bool operator==(const Bone& bone) const;
+		bool operator!=(const Bone& bone) const;
+		bool operator<(const Bone& bone) const;
 
-	std::pair<int, int> get();
-	void set(int left, int right);
-	
-	int getSum() const;
+		std::pair<int, int> get();
+		void set(int left, int right);
 
-	static Bone genetate();
-	Bone(int left = 0, int right = 0);
-};
+		int getSum() const;
 
-class Domino
-{
-public:
-	static constexpr int MAX_BONES = 28;
+		static Bone genetate();
+		Bone(int left = 0, int right = 0);
+	};
 
-	Domino(int num = 0);
-	Domino(const std::initializer_list<Bone>& list);
+	class Domino
+	{
+	public:
+		static constexpr int MAX_BONES = 28;
 
-	int size() const;
-	void sort();
-	Domino findScore(int val) const;
+		Domino(int num = 0);
+		Domino(const std::initializer_list<Bone>& list);
 
-	Domino& operator+=(const Bone& bone);
-	const Bone& operator[](int n) const;
-	Bone& operator[](int n);
+		int size() const;
+		void sort();
+		Domino findScore(int val) const;
 
-private:
-	Bone bones[MAX_BONES];
-	int bonesNum;
+		Domino& operator+=(const Bone& bone);
+		const Bone& operator[](int n) const;
+		Bone& operator[](int n);
 
-	/*
-	При помощи ГПСЧ генерирует Bone, которого ещё нет в массиве
-	Если массив уже заполнен, то бросает overflow_error
-	*/
-	Bone generateBone();
-};
+	private:
+		Bone bones[MAX_BONES];
+		int bonesNum;
+
+		/*
+		При помощи ГПСЧ генерирует Bone, которого ещё нет в массиве
+		Если массив уже заполнен, то бросает overflow_error
+		*/
+		Bone generateBone();
+	};
+}
