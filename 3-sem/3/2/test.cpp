@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "../Algorithms/utils.h"
+using namespace lab3;
 
 TEST(Bone, testContructor)
 {
@@ -13,7 +14,7 @@ TEST(Bone, testContructor)
 }
 
 TEST(Bone, testGetSet)
-{ 
+{
     Bone b;
 
     b.set(Bone::MAX_POINTS, Bone::MAX_POINTS);
@@ -84,10 +85,10 @@ TEST(Domino, testContructor)
     ASSERT_EQ(d2.size(), 0);
 
     Domino d3{ Bone(0, Bone::MAX_POINTS), Bone(0, Bone::MAX_POINTS - 1), Bone(Bone::MAX_POINTS, 0) };
-    ASSERT_EQ(d3.size(), 3); 
+    ASSERT_EQ(d3.size(), 3);
     ASSERT_TRUE(d3[1] == Bone(0, Bone::MAX_POINTS - 1));
     ASSERT_TRUE(d3[2] == Bone(Bone::MAX_POINTS, 0));
-    ASSERT_THROW(Domino({ Bone(0, 0), Bone(0, 0) }), std::invalid_argument); 
+    ASSERT_THROW(Domino({ Bone(0, 0), Bone(0, 0) }), std::invalid_argument);
 }
 
 TEST(Domino, testBracketsOperator)

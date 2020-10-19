@@ -1,4 +1,5 @@
 #include "utils.h"
+using namespace lab3;
 
 Bone Domino::generateBone()
 {
@@ -17,6 +18,9 @@ Domino::Domino(int num)
 {
 	if (num > Domino::MAX_BONES)
 		throw std::overflow_error("Превышено максимальное число костей");
+	if (num < 0)
+		throw std::invalid_argument("Число костей не может быть отрицательным");
+
 
 	for (int i = 0; i < num; i++)
 	{
@@ -115,14 +119,14 @@ Domino& Domino::operator+=(const Bone& bone)
 
 const Bone& Domino::operator[](int n) const
 {
-	if (n > bonesNum - 1)
+	if (n > bonesNum - 1 || n < 0)
 		throw std::out_of_range("Индекс за пределами массива");
 	return bones[n];
 }
 
 Bone& Domino::operator[](int n)
 {
-	if (n > bonesNum - 1)
+	if (n > bonesNum - 1 || n < 0)
 		throw std::out_of_range("Индекс за пределами массива");
 	return bones[n];
 }
@@ -151,6 +155,8 @@ void Bone::set(int left, int right)
 {
 	if (left > MAX_POINTS || right > MAX_POINTS)
 		throw std::invalid_argument("Максимальное значение стороны кости - " + std::to_string(MAX_POINTS));
+	if (left < 0 || right < 0)
+		throw std::invalid_argument("Значение кости не может быть меньше 0");
 	this->left = left;
 	this->right = right;
 }
