@@ -25,12 +25,15 @@ TEST(Bone, testGetSet)
 
 TEST(Bone, testEqualOperator)
 {
-    Bone b1(Bone::MAX_POINTS, Bone::MAX_POINTS), b2(Bone::MAX_POINTS, Bone::MAX_POINTS);
+    Bone b1(0, 1), b2(0, 1);
 
     ASSERT_TRUE(b1 == b2);
     ASSERT_FALSE(b1 != b2);
 
-    b1.set(Bone::MAX_POINTS - 1, Bone::MAX_POINTS);
+    b1.set(1, 1);
+    ASSERT_FALSE(b1 == b2);
+
+    b1.set(1, 0);
     ASSERT_FALSE(b1 == b2);
 }
 
@@ -81,6 +84,10 @@ TEST(Domino, testContructor)
     ASSERT_TRUE(isBonesUnique(d4));
     ASSERT_EQ(d4.size(), Domino::MAX_BONES);
 
+    Domino d5(Bone(1, 1));
+    ASSERT_EQ(d5.size(), 1);
+    ASSERT_TRUE(d5[0] == Bone(1, 1));
+
     Domino d2;
     ASSERT_EQ(d2.size(), 0);
 
@@ -118,28 +125,45 @@ TEST(Domino, testIncrement)
     ASSERT_THROW(d2++, std::overflow_error);
 }
 
-TEST(Domino, testMinus)
-{
-    Bone b(1, 2);
-    Domino d1{ b, Bone(2, 1), Bone(3, 4) };
-    d1 -= b;
-    ASSERT_EQ(d1.size(), 2);
-    ASSERT_TRUE(d1[0] == Bone(2, 1));
-    ASSERT_TRUE(d1[1] == Bone(3, 4));
-    ASSERT_THROW(d1[2], std::out_of_range);
-
-    Domino d2{ Bone(2, 1), Bone(3, 4) };
-    ASSERT_THROW(d2 -= b, std::out_of_range);
-}
-
 TEST(Domino, testPlus)
 {
-    Bone b(1, 2);
-    Domino d{ Bone(2, 1), Bone(3, 4) };
-    d += b;
-    ASSERT_EQ(d.size(), 3);
-    ASSERT_TRUE(d[2] == b);
-    ASSERT_THROW(d += b, std::invalid_argument);
+    Domino d1{ Bone(0, 0), Bone(0, 2) };
+    Domino d2{ Bone(1, 0), Bone(2, 0) };
+    
+    d1 += d2;
+    ASSERT_EQ(d1.size(), 4);
+    ASSERT_TRUE(d1[0] == Bone(0, 0));
+    ASSERT_TRUE(d1[1] == Bone(0, 2));
+    ASSERT_TRUE(d1[2] == Bone(1, 0));
+    ASSERT_TRUE(d1[3] == Bone(2, 0));
+
+    ASSERT_THROW(d1 += d2, std::out_of_range);
+
+    Domino d3(Domino::MAX_BONES);
+    ASSERT_THROW(d1 += d3, std::overflow_error);
+
+    d1 -= Bone(0, 0);
+    ASSERT_EQ(d1.size(), 3);
+    ASSERT_TRUE(d1[0] == Bone(0, 2));
+    ASSERT_TRUE(d1[1] == Bone(1, 0));
+    ASSERT_TRUE(d1[2] == Bone(2, 0));
+}
+
+TEST(Domino, testMinus)
+{
+    Domino d1{ Bone(0, 0), Bone(0, 1), Bone(0, 2), Bone(0, 3) };
+    Domino d2{ Bone(0, 0), Bone(0, 1) };
+
+    d1 -= d2;
+    ASSERT_EQ(d1.size(), 2);
+    ASSERT_TRUE(d1[0] == Bone(0, 2));
+    ASSERT_TRUE(d1[1] == Bone(0, 3));
+
+    ASSERT_THROW(d1 -= d2, std::out_of_range);
+
+    d1 -= Bone(0, 2);
+    ASSERT_EQ(d1.size(), 1);
+    ASSERT_TRUE(d1[0] == Bone(0, 3));
 }
 
 TEST(Domino, testSort)

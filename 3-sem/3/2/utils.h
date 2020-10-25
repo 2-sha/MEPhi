@@ -39,6 +39,7 @@ namespace lab3
 		static constexpr int MAX_BONES = 28;
 
 		Domino(int num = 0);
+		Domino(const Bone& bone);
 		Domino(const std::initializer_list<Bone>& list);
 
 		int size() const;
@@ -50,8 +51,8 @@ namespace lab3
 
 		Domino& operator++();
 		Domino operator++(int);
-		Domino& operator-=(const Bone& bone);
-		Domino& operator+=(const Bone& bone);
+		Domino& operator-=(const Domino& domino);
+		Domino& operator+=(const Domino& domino);
 
 		const Bone& operator[](int n) const;
 		Bone& operator[](int n);
@@ -59,6 +60,8 @@ namespace lab3
 	private:
 		Bone bones[MAX_BONES];
 		int bonesNum;
+
+		void removeBone(int i);
 
 		/*
 		При помощи ГПСЧ генерирует Bone, которого ещё нет в массиве
