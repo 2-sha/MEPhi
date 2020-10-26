@@ -29,6 +29,12 @@ Domino::Domino(int num)
 	}
 }
 
+Domino::Domino(const Bone& bone)
+{
+	bones[0] = bone;
+	bonesNum = 1;
+}
+
 Domino::Domino(const std::initializer_list<Bone>& list)
 	: bonesNum(0)
 {
@@ -86,33 +92,31 @@ Domino Domino::operator++(int)
 	return tmp;
 }
 
-Domino& Domino::operator-=(const Bone& bone)
+Domino &Domino::operator-=(const Domino & domino)
 {
-	Bone* p = std::find(bones, bones + bonesNum, bone);
-	if (p == bones + bonesNum)
-		throw std::out_of_range("Не найдена указанная кость");
-
-	int index = p - bones;
-	for (int i = index; i <= bonesNum; i++)
+	for (int i = 0; i < domino.size(); i++)
 	{
-		if (i == bonesNum)
-			bones[i] = Bone();
-		else
-			bones[i] = bones[i + 1];
+		Bone* p = std::find(bones, bones + bonesNum, domino[i]);
+		if (p == bones + bonesNum)
+			throw std::out_of_range("Не найдена указанная кость");
+		removeBone(p - bones);
 	}
-	bonesNum--;
 
 	return *this;
 }
 
-Domino& Domino::operator+=(const Bone& bone)
+Domino &Domino::operator+=(const Domino & domino)
 {
-	if (size() == MAX_BONES)
-		throw std::overflow_error("Превышено максимально число костей");
-	if (std::find(bones, bones + bonesNum, bone) != bones + bonesNum)
-		throw std::invalid_argument("Такая кость уже существует");
+	if (this->size() + domino.size() > Domino::MAX_BONES)
+		throw std::overflow_error("Превышено максимальное кол-во костей");
+	for (int i = 0; i < domino.size(); i++)
+	{
+		if (std::find(bones, bones + bonesNum, domino[i]) != bones + bonesNum)
+			throw std::out_of_range("Одна из костей уже существует");
+	}
 
-	bones[bonesNum++] = bone;
+	for (int i = 0; i < domino.size(); i++)
+		bones[bonesNum++] = domino[i];
 
 	return *this;
 }
@@ -129,6 +133,20 @@ Bone& Domino::operator[](int n)
 	if (n > bonesNum - 1 || n < 0)
 		throw std::out_of_range("Индекс за пределами массива");
 	return bones[n];
+}
+
+void Domino::removeBone(int index)
+{
+	if (index < 0 || index > bonesNum - 1)
+		throw std::out_of_range("Индекс находится за пределами массива");
+	for (int i = index; i <= bonesNum; i++)
+	{
+		if (i == bonesNum)
+			bones[i] = Bone();
+		else
+			bones[i] = bones[i + 1];
+	}
+	bonesNum--;
 }
 
 bool Bone::operator==(const Bone& bone) const
