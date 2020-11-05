@@ -1,4 +1,4 @@
-п»ї#include <iostream>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include "gui.h"
@@ -9,18 +9,18 @@ using namespace std;
 using namespace cursesgui;
 
 /*
- - РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
-    + Р—Р°РґР°С‚СЊ Р·РЅР°С‡РµРЅРёСЏ РєР°Р¶РґРѕР№ РєР°СЂС‚С‹
-	+ РЈРєР°Р·Р°С‚СЊ РєРѕР»-РІРѕ РєР°СЂС‚
- - Р’С‹РІРѕРґ
-    + Р’СЃСЋ РєРѕР»РѕРґСѓ
-	+ Р’С‹РІРµСЃС‚Рё РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РєР°СЂС‚Рµ РїРѕ РЅРѕРјРµСЂСѓ
-	+ РџРѕРєР°Р·Р°С‚СЊ РєР°СЂС‚С‹ Р·Р°РґР°РЅРЅРѕР№ РјР°СЃС‚Рё
- - Р”РѕР±Р°РІРёС‚СЊ
-    + Р—Р°РґР°С‚СЊ Р·РЅР°С‡РµРЅРёСЏ РєР°СЂС‚С‹
-	+ РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ
- - РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ
- - Р’С‹С…РѕРґ
+ - Инициализация
+	+ Задать значения каждой карты
+	+ Указать кол-во карт
+ - Вывод
+	+ Всю колоду
+	+ Вывести информацию о карте по номеру
+	+ Показать карты заданной масти
+ - Добавить
+	+ Задать значения карты
+	+ Сгенерировать
+ - Отсортировать
+ - Выход
 */
 
 inline bool isInteger(const std::string&);
@@ -35,15 +35,15 @@ Deck deck;
 
 int main()
 {
-	GUI gui("РљРѕР»РѕРґР° РєР°СЂС‚");
+	GUI gui("Колода карт");
 
 	gui.addActions({
-		{ 1, "РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ", init },
-		{ 2, "Р’С‹РІРѕРґ", show },
-		{ 3, "Р”РѕР±Р°РІР»РµРЅРёРµ", input },
-		{ 4, "РЎРѕСЂС‚РёСЂРѕРІРєР°", sort },
-		{ 5, "Р’С‹С…РѕРґ", quit },
-	});
+		{ 1, "Инициализация", init },
+		{ 2, "Вывод", show },
+		{ 3, "Добавление", input },
+		{ 4, "Сортировка", sort },
+		{ 5, "Выход", quit },
+		});
 
 	return gui.run();
 }
@@ -61,17 +61,17 @@ inline bool isInteger(const std::string& s)
 void init(GUI& gui)
 {
 	auto input = gui.getInputs({
-		{ 1, "Р Р°Р·РјРµСЂ", true },
-		{ 2, "РЈРєР°Р·Р°С‚СЊ Р·РЅР°С‡РµРЅРёСЏ", false },
-		{ 3, "РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ РєРѕР»РѕРґСѓ", false },
-		{ 4, "РќР°Р·Р°Рґ", false },
-	}, [](GUI::InputData data) {
-		if (data[4].isChosen)
+		{ 1, "Размер", true },
+		{ 2, "Указать значения", false },
+		{ 3, "Сгенерировать колоду", false },
+		{ 4, "Назад", false },
+		}, [](GUI::InputData data) {
+			if (data[4].isChosen)
+				return std::make_pair(true, "");
+			if (!isInteger(data[1].value) || stoi(data[1].value) < 1 || stoi(data[1].value) > deck.get_MAX_LEN())
+				return std::make_pair(false, "Некорректный размер");
 			return std::make_pair(true, "");
-		if (!isInteger(data[1].value) || stoi(data[1].value) < 1 || stoi(data[1].value) > deck.get_MAX_LEN())
-			return std::make_pair(false, "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ СЂР°Р·РјРµСЂ");
-		return std::make_pair(true, "");
-	});
+		});
 
 	if (input[4].isChosen)
 		return;
@@ -83,21 +83,22 @@ void init(GUI& gui)
 		for (int i = 0; i < size; i++)
 		{
 			auto input = gui.getInputs({
-				{ 1, "РњР°СЃС‚СЊ (S, H, C, D)", true },
-				{ 2, "Р Р°РЅРі (2 .. 10, 11 - J, 12 - Q, 13 - K, 14 - A)", true },
-				{ 3, "Р”Р°Р»СЊС€Рµ (" + to_string(i) + "/" + to_string(size) + ")", false },
-				{ 4, "РћС‚РјРµРЅРёС‚СЊ", false },
-			}, [&newDeck](GUI::InputData data) {
-				if (data[4].isChosen)
+				{ 1, "Масть (S, H, C, D)", true },
+				{ 2, "Ранг (2 .. 10, 11 - J, 12 - Q, 13 - K, 14 - A)", true },
+				{ 3, "Дальше (" + to_string(i) + "/" + to_string(size) + ")", false },
+				{ 4, "Отменить", false },
+				}, [&newDeck](GUI::InputData data) {
+					if (data[4].isChosen)
+						return std::make_pair(true, "");
+					char suit = data[1].value.c_str()[0];
+					if (suit != 'S' && suit != 'H' && suit != 'C' && suit != 'D')
+						return std::make_pair(false, "Некорректная масть");
+					if (!isInteger(data[2].value) || stoi(data[2].value) < 2 || stoi(data[2].value) > 14)
+						return std::make_pair(false, "Некорректный ранг");
+					if (newDeck.find_card(Card(suit, stoi(data[2].value))) != -1)
+						return std::make_pair(false, "Карточка уже существует");
 					return std::make_pair(true, "");
-				char suit = data[1].value.c_str()[0];
-				if (suit != 'S' && suit != 'H' && suit != 'C' && suit != 'D')
-					return std::make_pair(false, "РќРµРєРѕСЂСЂРµРєС‚РЅР°СЏ РјР°СЃС‚СЊ");
-				if (!isInteger(data[2].value) || stoi(data[2].value) < 2 || stoi(data[2].value) > 14)
-					return std::make_pair(false, "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ СЂР°РЅРі");
-				if (newDeck.find_card(Card(suit, stoi(data[2].value))) != -1)
-					return std::make_pair(false, "РљР°СЂС‚РѕС‡РєР° СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚");
-			});
+				});
 			if (input[4].isChosen)
 			{
 				init(gui);
@@ -114,17 +115,17 @@ void init(GUI& gui)
 	gui.removeAction(1);
 	if (deck.get_len() == deck.get_MAX_LEN())
 		gui.removeAction(3);
-	gui.showPopup("РЈСЃРїРµС€РЅРѕ!", "РљРѕР»РѕРґР° РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅР°");
+	gui.showPopup("Успешно!", "Колода инициализирована");
 }
 
 void show(GUI& gui)
 {
 	int choice = gui.getChoice({
-		{ 1, "Р’СЃСЏ РєРѕР»РѕРґР°" },
-		{ 2, "РљР°СЂС‚Р° РїРѕ РЅРѕРјРµСЂСѓ" },
-		{ 3, "РљР°СЂС‚С‹ СѓРєР°Р·Р°РЅРЅРѕР№ РјР°СЃС‚Рё" },
-		{ 4, "РќР°Р·Р°Рґ" },
-	});
+		{ 1, "Вся колода" },
+		{ 2, "Карта по номеру" },
+		{ 3, "Карты указанной масти" },
+		{ 4, "Назад" },
+		});
 
 	if (choice == 1)
 	{
@@ -136,16 +137,16 @@ void show(GUI& gui)
 	else if (choice == 2)
 	{
 		auto input = gui.getInputs({
-			{ 1, "РРЅРґРµРєСЃ (2 .. 10, 11 - J, 12 - Q, 13 - K, 14 - A)", true },
-			{ 2, "РќР°Р№С‚Рё", false },
-			{ 3, "РќР°Р·Р°Рґ", false },
-		}, [](GUI::InputData data) {
-			if (data[3].isChosen)
+			{ 1, "Индекс", true },
+			{ 2, "Найти", false },
+			{ 3, "Назад", false },
+			}, [](GUI::InputData data) {
+				if (data[3].isChosen)
+					return std::make_pair(true, "");
+				if (!isInteger(data[1].value) || stoi(data[1].value) < 0 || stoi(data[1].value) > deck.get_len())
+					return std::make_pair(false, "Некорректный индекс");
 				return std::make_pair(true, "");
-			if (!isInteger(data[1].value) || stoi(data[1].value) < 0 || stoi(data[1].value) > deck.get_len())
-				return std::make_pair(false, "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ РёРЅРґРµРєСЃ");
-			return std::make_pair(true, "");
-		});
+			});
 		if (input[3].isChosen)
 		{
 			show(gui);
@@ -153,25 +154,25 @@ void show(GUI& gui)
 		}
 
 		int index = stoi(input[1].value);
-		gui.showPopup("РљР°СЂС‚Р° в„–" + to_string(index), {
-			"РњР°СЃС‚СЊ: " + string(1, deck.get_card(index).get_suit_ch()), 
-			"Р Р°РЅРі: " + deck.get_card(index).get_rang_str(),
-		});
+		gui.showPopup("Карта №" + to_string(index), {
+			"Масть: " + string(1, deck.get_card(index).get_suit_ch()),
+			"Ранг: " + deck.get_card(index).get_rang_str(),
+			});
 	}
 	else if (choice == 3)
 	{
 		auto input = gui.getInputs({
-			{ 1, "РњР°СЃС‚СЊ (S, H, C, D)", true },
-			{ 2, "РќР°Р№С‚Рё", false },
-			{ 3, "РќР°Р·Р°Рґ", false },
-		}, [](GUI::InputData data) {
-			if (data[3].isChosen)
+			{ 1, "Масть (S, H, C, D)", true },
+			{ 2, "Найти", false },
+			{ 3, "Назад", false },
+			}, [](GUI::InputData data) {
+				if (data[3].isChosen)
+					return std::make_pair(true, "");
+				char suit = data[1].value.c_str()[0];
+				if (suit != 'S' && suit != 'H' && suit != 'C' && suit != 'D')
+					return std::make_pair(false, "Некорректная масть");
 				return std::make_pair(true, "");
-			char suit = data[1].value.c_str()[0];
-			if (suit != 'S' && suit != 'H' && suit != 'C' && suit != 'D')
-				return std::make_pair(false, "РќРµРєРѕСЂСЂРµРєС‚РЅР°СЏ РјР°СЃС‚СЊ");
-			return std::make_pair(true, "");
-		});
+			});
 		if (input[3].isChosen)
 		{
 			show(gui);
@@ -196,10 +197,10 @@ void show(GUI& gui)
 void input(GUI& gui)
 {
 	int choice = gui.getChoice({
-		{ 1, "РЈРєР°Р·Р°С‚СЊ" },
-		{ 2, "РЎРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ" },
-		{ 3, "РќР°Р·Р°Рґ" },
-	});
+		{ 1, "Указать" },
+		{ 2, "Сгенерировать" },
+		{ 3, "Назад" },
+		});
 	if (choice == 3)
 		return;
 
@@ -207,20 +208,21 @@ void input(GUI& gui)
 	if (choice == 1)
 	{
 		auto data = gui.getInputs({
-				{ 1, "РњР°СЃС‚СЊ (S, H, C, D)", true },
-				{ 2, "Р Р°РЅРі (2 .. 10, 11 - J, 12 - Q, 13 - K, 14 - A)", true },
-				{ 3, "РћС‚РјРµРЅРёС‚СЊ", false },
-		}, [](GUI::InputData data) {
-			if (data[3].isChosen)
+				{ 1, "Масть (S, H, C, D)", true },
+				{ 2, "Ранг (2 .. 10, 11 - J, 12 - Q, 13 - K, 14 - A)", true },
+				{ 3, "Отменить", false },
+			}, [](GUI::InputData data) {
+				if (data[3].isChosen)
+					return std::make_pair(true, "");
+				char suit = data[1].value.c_str()[0];
+				if (suit != 'S' && suit != 'H' && suit != 'C' && suit != 'D')
+					return std::make_pair(false, "Некорректная масть");
+				if (!isInteger(data[2].value) || stoi(data[2].value) < 2 || stoi(data[2].value) > 14)
+					return std::make_pair(false, "Некорректный ранг");
+				if (deck.find_card(Card(suit, stoi(data[2].value))) != -1)
+					return std::make_pair(false, "Карточка уже существует");
 				return std::make_pair(true, "");
-			char suit = data[1].value.c_str()[0];
-			if (suit != 'S' && suit != 'H' && suit != 'C' && suit != 'D')
-				return std::make_pair(false, "РќРµРєРѕСЂСЂРµРєС‚РЅР°СЏ РјР°СЃС‚СЊ");
-			if (!isInteger(data[2].value) || stoi(data[2].value) < 2 || stoi(data[2].value) > 14)
-				return std::make_pair(false, "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ СЂР°РЅРі");
-			if (deck.find_card(Card(suit, stoi(data[2].value))) != -1)
-				return std::make_pair(false, "РљР°СЂС‚РѕС‡РєР° СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚");
-		});
+			});
 		if (data[3].isChosen)
 		{
 			input(gui);
@@ -235,16 +237,16 @@ void input(GUI& gui)
 	}
 
 	deck.add_new_card(card);
-	gui.showPopup("РќРѕРІР°СЏ РєР°СЂС‚Р°", {
-		"РњР°СЃС‚СЊ: " + string(1, card.get_suit_ch()),
-		"Р Р°РЅРі: " + card.get_rang_str(),
-	});
+	gui.showPopup("Новая карта", {
+		"Масть: " + string(1, card.get_suit_ch()),
+		"Ранг: " + card.get_rang_str(),
+		});
 }
 
 void sort(GUI& gui)
 {
 	deck.sort();
-	gui.showPopup("РЈСЃРїРµС€РЅРѕ!", "РљРѕР»РѕРґР° РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅР°");
+	gui.showPopup("Успешно!", "Колода отсортирована");
 }
 
 void quit(GUI& gui)
