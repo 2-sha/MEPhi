@@ -17,20 +17,22 @@ namespace lab3
 	public:
 		static constexpr int MAX_POINTS = 6;
 
-		bool operator==(const Bone& bone) const;
-		bool operator!=(const Bone& bone) const;
-		bool operator<(const Bone& bone) const;
+		bool operator==(const Bone&) const;
+		bool operator!=(const Bone&) const;
+		bool operator<(const Bone&) const;
+		bool operator>(const Bone&) const;
+		bool operator<=(const Bone&) const;
+		bool operator>=(const Bone&) const;
 
-		friend std::ostream& operator<< (std::ostream& out, const Bone& bone);
-		friend std::istream& operator>> (std::istream& in, Bone& bone);
+		friend std::ostream& operator<< (std::ostream&, const Bone&);
+		friend std::istream& operator>> (std::istream&, Bone&);
 
 		std::pair<int, int> get();
-		void set(int left, int right);
+		void set(int, int);
 
 		int getSum() const;
 
-		static Bone genetate();
-		Bone(int left = 0, int right = 0);
+		Bone(int = 0, int = 0);
 	};
 
 	class Domino
@@ -38,32 +40,32 @@ namespace lab3
 	public:
 		static constexpr int MAX_BONES = 28;
 
-		Domino(int num = 0);
-		Domino(const Bone& bone);
-		Domino(const std::initializer_list<Bone>& list);
-		Domino(const Domino& domino);
+		Domino(int = 0);
+		Domino(const Bone&);
+		Domino(const std::initializer_list<Bone>&);
+		Domino(const Domino&);
+		Domino(Domino&&);
 		~Domino();
 
 		int size() const;
 		void sort();
-		Domino findScore(int val) const;
+		Domino findScore(int) const;
 
-		friend std::ostream& operator<< (std::ostream& out, const Domino& domino);
-		friend std::istream& operator>> (std::istream& in, Domino& point);
+		friend std::ostream& operator<< (std::ostream&, const Domino&);
+		friend std::istream& operator>> (std::istream&, Domino&);
 
 		Domino& operator++();
 		Domino operator++(int);
-		Domino& operator-=(const Domino& domino);
-		Domino& operator+=(const Domino& domino);
+		Domino& operator-=(const Domino&);
+		Domino& operator+=(const Domino&);
 
-		Domino& operator= (const Domino& domino);
+		Domino& operator= (const Domino&);
 
-		const Bone& operator[](int n) const;
-		Bone& operator[](int n);
+		const Bone& operator[](int) const;
 
 	private:
 		Bone *bones;
-		int bonesNum;
+		unsigned int bonesNum;
 
 		/*
 		При помощи ГПСЧ генерирует Bone, которого ещё нет в массиве
