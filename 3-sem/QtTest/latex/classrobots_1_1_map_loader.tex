@@ -1,0 +1,182 @@
+\hypertarget{classrobots_1_1_map_loader}{}\doxysection{robots\+::Map\+Loader Class Reference}
+\label{classrobots_1_1_map_loader}\index{robots::MapLoader@{robots::MapLoader}}
+
+
+Loads map from file or Q\+Json.  
+
+
+
+
+{\ttfamily \#include $<$Map\+Loader.\+h$>$}
+
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map}{Map}} $>$ \mbox{\hyperlink{classrobots_1_1_map_loader_ae364177982f2db1d2b27294b28fc63de}{load}} (const Q\+Json\+Object \&json)
+\begin{DoxyCompactList}\small\item\em Loads environment and objects from json. \end{DoxyCompactList}\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map}{Map}} $>$ \mbox{\hyperlink{classrobots_1_1_map_loader_adda7f43a195d65a91607cf6d02b45dc7}{load\+From\+File}} (const Q\+String \&path)
+\begin{DoxyCompactList}\small\item\em Loads environment and objects from file. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classrobots_1_1_map_loader_aece8ef8c2d2af2ead309e83ad8ff853d}{load\+Module}} (const Q\+Json\+Object \&json, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_platform}{Platform}} $>$ platform)
+\begin{DoxyCompactList}\small\item\em Loads module from json and attachs it to specified platform. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classrobots_1_1_map_loader_a5a7bea5487d141c72e8b10198b479a91}{load\+Map\+Object}} (const Q\+Json\+Object \&json, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map}{Map}} $>$ map)
+\begin{DoxyCompactList}\small\item\em Loads object from json and attachs it to specified map. \end{DoxyCompactList}\item 
+static unsigned \mbox{\hyperlink{classrobots_1_1_map_loader_a78ec6eabb1e1efd1db1150548f6e7756}{load\+U\+Int}} (const Q\+Json\+Object \&json, const Q\+String \&\&val, bool required=true)
+\begin{DoxyCompactList}\small\item\em Loads unsigned int from json. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{classrobots_1_1_map_loader_aae04932c577115e4c783d3ce9e66a200}{load\+Str}} (const Q\+Json\+Object \&json, const Q\+String \&\&val, bool required=true)
+\begin{DoxyCompactList}\small\item\em Loads std\+::string from json. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Loads map from file or Q\+Json. 
+
+I separed this class from \mbox{\hyperlink{classrobots_1_1_map}{Map}}, because I don\textquotesingle{}t want to user Qt in this lib 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classrobots_1_1_map_loader_ae364177982f2db1d2b27294b28fc63de}\label{classrobots_1_1_map_loader_ae364177982f2db1d2b27294b28fc63de}} 
+\index{robots::MapLoader@{robots::MapLoader}!load@{load}}
+\index{load@{load}!robots::MapLoader@{robots::MapLoader}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map}{Map}} $>$ Map\+Loader\+::load (\begin{DoxyParamCaption}\item[{const Q\+Json\+Object \&}]{json }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Loads environment and objects from json. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em json} & Json object, which describes map \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+shared\+\_\+ptr to loaded map 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & If incorrect config line is met \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classrobots_1_1_map_loader_adda7f43a195d65a91607cf6d02b45dc7}\label{classrobots_1_1_map_loader_adda7f43a195d65a91607cf6d02b45dc7}} 
+\index{robots::MapLoader@{robots::MapLoader}!loadFromFile@{loadFromFile}}
+\index{loadFromFile@{loadFromFile}!robots::MapLoader@{robots::MapLoader}}
+\doxysubsubsection{\texorpdfstring{loadFromFile()}{loadFromFile()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map}{Map}} $>$ Map\+Loader\+::load\+From\+File (\begin{DoxyParamCaption}\item[{const Q\+String \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Loads environment and objects from file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & Path to the file with configuration \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+shared\+\_\+ptr to loaded map 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & If incorrect config line is met \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classrobots_1_1_map_loader_a5a7bea5487d141c72e8b10198b479a91}\label{classrobots_1_1_map_loader_a5a7bea5487d141c72e8b10198b479a91}} 
+\index{robots::MapLoader@{robots::MapLoader}!loadMapObject@{loadMapObject}}
+\index{loadMapObject@{loadMapObject}!robots::MapLoader@{robots::MapLoader}}
+\doxysubsubsection{\texorpdfstring{loadMapObject()}{loadMapObject()}}
+{\footnotesize\ttfamily void Map\+Loader\+::load\+Map\+Object (\begin{DoxyParamCaption}\item[{const Q\+Json\+Object \&}]{json,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map}{Map}} $>$}]{map }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Loads object from json and attachs it to specified map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em json} & Json with object configuration \\
+\hline
+{\em map} & shared\+\_\+ptr to map, in which module will load \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & If incorrect config line is met \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classrobots_1_1_map_loader_aece8ef8c2d2af2ead309e83ad8ff853d}\label{classrobots_1_1_map_loader_aece8ef8c2d2af2ead309e83ad8ff853d}} 
+\index{robots::MapLoader@{robots::MapLoader}!loadModule@{loadModule}}
+\index{loadModule@{loadModule}!robots::MapLoader@{robots::MapLoader}}
+\doxysubsubsection{\texorpdfstring{loadModule()}{loadModule()}}
+{\footnotesize\ttfamily static void robots\+::\+Map\+Loader\+::load\+Module (\begin{DoxyParamCaption}\item[{const Q\+Json\+Object \&}]{json,  }\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_platform}{Platform}} $>$}]{platform }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Loads module from json and attachs it to specified platform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em json} & Json with module configuration \\
+\hline
+{\em platform} & shared\+\_\+ptr to platform, in which module will load \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & If incorrect config line is met \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classrobots_1_1_map_loader_aae04932c577115e4c783d3ce9e66a200}\label{classrobots_1_1_map_loader_aae04932c577115e4c783d3ce9e66a200}} 
+\index{robots::MapLoader@{robots::MapLoader}!loadStr@{loadStr}}
+\index{loadStr@{loadStr}!robots::MapLoader@{robots::MapLoader}}
+\doxysubsubsection{\texorpdfstring{loadStr()}{loadStr()}}
+{\footnotesize\ttfamily std\+::string Map\+Loader\+::load\+Str (\begin{DoxyParamCaption}\item[{const Q\+Json\+Object \&}]{json,  }\item[{const Q\+String \&\&}]{val,  }\item[{bool}]{required = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Loads std\+::string from json. 
+
+Native function provide only Q\+String retriving
+
+
+\begin{DoxyParams}{Parameters}
+{\em json} & Json with string \\
+\hline
+{\em val} & Name of the field with string \\
+\hline
+{\em required} & If value is required and not found, std\+::invalid\+\_\+argument will be thrown \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & If incorrect config line is met \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classrobots_1_1_map_loader_a78ec6eabb1e1efd1db1150548f6e7756}\label{classrobots_1_1_map_loader_a78ec6eabb1e1efd1db1150548f6e7756}} 
+\index{robots::MapLoader@{robots::MapLoader}!loadUInt@{loadUInt}}
+\index{loadUInt@{loadUInt}!robots::MapLoader@{robots::MapLoader}}
+\doxysubsubsection{\texorpdfstring{loadUInt()}{loadUInt()}}
+{\footnotesize\ttfamily unsigned Map\+Loader\+::load\+U\+Int (\begin{DoxyParamCaption}\item[{const Q\+Json\+Object \&}]{json,  }\item[{const Q\+String \&\&}]{val,  }\item[{bool}]{required = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Loads unsigned int from json. 
+
+Native function provide only int retriving
+
+
+\begin{DoxyParams}{Parameters}
+{\em json} & Json with number \\
+\hline
+{\em val} & Name of the field with number \\
+\hline
+{\em required} & If value is required and not found, std\+::invalid\+\_\+argument will be thrown \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & If incorrect config line is met \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Map\+Loader.\+h\item 
+Map\+Loader.\+cpp\end{DoxyCompactItemize}

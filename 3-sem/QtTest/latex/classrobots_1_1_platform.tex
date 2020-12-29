@@ -1,0 +1,122 @@
+\hypertarget{classrobots_1_1_platform}{}\doxysection{robots\+::Platform Class Reference}
+\label{classrobots_1_1_platform}\index{robots::Platform@{robots::Platform}}
+
+
+Base class for all robots.  
+
+
+
+
+{\ttfamily \#include $<$Platform.\+h$>$}
+
+Inheritance diagram for robots\+::Platform\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classrobots_1_1_platform}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classrobots_1_1_platform_a009a98452ca358113237fa1b14aefcee}\label{classrobots_1_1_platform_a009a98452ca358113237fa1b14aefcee}} 
+{\bfseries Platform} (const unsigned consumption, const unsigned slots\+Num, const unsigned price, const std\+::string \&description=\char`\"{}\char`\"{})
+\item 
+void \mbox{\hyperlink{classrobots_1_1_platform_aa751abbe08ebbe3628845fff11293d80}{proccess\+Modules}} ()
+\begin{DoxyCompactList}\small\item\em Sort modules by their priority and recalculate summary consumption and energy level. \end{DoxyCompactList}\item 
+std\+::pair$<$ unsigned, unsigned $>$ \mbox{\hyperlink{classrobots_1_1_platform_ab9f8d5fb22b7f088918074d53cff5ef8}{get\+Energy\+Status}} () const
+\begin{DoxyCompactList}\small\item\em Get summary energy and consumption levels. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classrobots_1_1_platform_a64b02552964e67467036740b5ee0c9a5}{dispatch}} (\mbox{\hyperlink{classrobots_1_1_base_request}{Base\+Request}} \&request)
+\begin{DoxyCompactList}\small\item\em Send given query to modules and return answer. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classrobots_1_1_platform_a4afd019e4d4cecd68d98e91b0c402854}\label{classrobots_1_1_platform_a4afd019e4d4cecd68d98e91b0c402854}} 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_module}{Module}} $>$ $>$ {\bfseries get\+Modules} ()
+\item 
+{\footnotesize template$<$typename Object\+Type , typename ... Args, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+base\+\_\+of\+\_\+v$<$\+Module, Object\+Type$>$$>$$>$ }\\std\+::shared\+\_\+ptr$<$ Object\+Type $>$ \mbox{\hyperlink{classrobots_1_1_platform_a54e058599ab00d87386589063bda35ec}{add\+Module}} (const unsigned \&\&priority, Args \&\&... args)
+\begin{DoxyCompactList}\small\item\em Simple objects factory, which create modules and attach them to platform. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classrobots_1_1_platform_a21f639900c480510650969df9c74d17d}\label{classrobots_1_1_platform_a21f639900c480510650969df9c74d17d}} 
+class {\bfseries Module}
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Base class for all robots. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classrobots_1_1_platform_a54e058599ab00d87386589063bda35ec}\label{classrobots_1_1_platform_a54e058599ab00d87386589063bda35ec}} 
+\index{robots::Platform@{robots::Platform}!addModule@{addModule}}
+\index{addModule@{addModule}!robots::Platform@{robots::Platform}}
+\doxysubsubsection{\texorpdfstring{addModule()}{addModule()}}
+{\footnotesize\ttfamily template$<$typename Object\+Type , typename ... Args, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+base\+\_\+of\+\_\+v$<$\+Module, Object\+Type$>$$>$$>$ \\
+std\+::shared\+\_\+ptr$<$Object\+Type$>$ robots\+::\+Platform\+::add\+Module (\begin{DoxyParamCaption}\item[{const unsigned \&\&}]{priority,  }\item[{Args \&\&...}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Simple objects factory, which create modules and attach them to platform. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em priority} & Priotiry for module \\
+\hline
+{\em args} & Parameters to be passed to the module constructor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+shared\+\_\+ptr to the const created module
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::overflow\+\_\+error} & If all module slots are busy \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classrobots_1_1_platform_a64b02552964e67467036740b5ee0c9a5}\label{classrobots_1_1_platform_a64b02552964e67467036740b5ee0c9a5}} 
+\index{robots::Platform@{robots::Platform}!dispatch@{dispatch}}
+\index{dispatch@{dispatch}!robots::Platform@{robots::Platform}}
+\doxysubsubsection{\texorpdfstring{dispatch()}{dispatch()}}
+{\footnotesize\ttfamily bool robots\+::\+Platform\+::dispatch (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classrobots_1_1_base_request}{Base\+Request}} \&}]{request }\end{DoxyParamCaption})}
+
+
+
+Send given query to modules and return answer. 
+
+This function sends a request to each of the modules until one of them returns true. Implements pattern Chain of Responsibility and Command in Module\+Request.
+
+
+\begin{DoxyParams}{Parameters}
+{\em request} & It can be any class, which inherits Module\+Request class \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+false, if request was not proccessed, and true if some handler catch it 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classrobots_1_1_platform_ab9f8d5fb22b7f088918074d53cff5ef8}\label{classrobots_1_1_platform_ab9f8d5fb22b7f088918074d53cff5ef8}} 
+\index{robots::Platform@{robots::Platform}!getEnergyStatus@{getEnergyStatus}}
+\index{getEnergyStatus@{getEnergyStatus}!robots::Platform@{robots::Platform}}
+\doxysubsubsection{\texorpdfstring{getEnergyStatus()}{getEnergyStatus()}}
+{\footnotesize\ttfamily std\+::pair$<$unsigned, unsigned$>$ robots\+::\+Platform\+::get\+Energy\+Status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get summary energy and consumption levels. 
+
+\begin{DoxyReturn}{Returns}
+std\+::pai with consumption level as first param and energy level as second 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classrobots_1_1_platform_aa751abbe08ebbe3628845fff11293d80}\label{classrobots_1_1_platform_aa751abbe08ebbe3628845fff11293d80}} 
+\index{robots::Platform@{robots::Platform}!proccessModules@{proccessModules}}
+\index{proccessModules@{proccessModules}!robots::Platform@{robots::Platform}}
+\doxysubsubsection{\texorpdfstring{proccessModules()}{proccessModules()}}
+{\footnotesize\ttfamily void robots\+::\+Platform\+::proccess\+Modules (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Sort modules by their priority and recalculate summary consumption and energy level. 
+
+If energy level is too low this function turns off modules with the lowest priority 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Platform.\+h\item 
+Platform.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,45 @@
+\hypertarget{classrobots_1_1_controller}{}\doxysection{robots\+::Controller Class Reference}
+\label{classrobots_1_1_controller}\index{robots::Controller@{robots::Controller}}
+Inheritance diagram for robots\+::Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classrobots_1_1_controller}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classrobots_1_1_controller_a9b72d69670ae6351dc556c5089be77fe}\label{classrobots_1_1_controller_a9b72d69670ae6351dc556c5089be77fe}} 
+{\bfseries Controller} (unsigned consumption, unsigned price, unsigned max\+Robots\+Num, unsigned action\+Range, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_platform}{Platform}} $>$ host=nullptr)
+\item 
+\mbox{\Hypertarget{classrobots_1_1_controller_af8bc48d1b5475b33015564477a9b4446}\label{classrobots_1_1_controller_af8bc48d1b5475b33015564477a9b4446}} 
+bool {\bfseries work} (\mbox{\hyperlink{classrobots_1_1_base_request}{Base\+Request}} \&request) override
+\item 
+\mbox{\Hypertarget{classrobots_1_1_controller_af2d5a4946236e002ee6d713d7a2fc719}\label{classrobots_1_1_controller_af2d5a4946236e002ee6d713d7a2fc719}} 
+void {\bfseries disable\+Managment} ()
+\item 
+\mbox{\Hypertarget{classrobots_1_1_controller_af51e765c5b938dbce2e652276f94f685}\label{classrobots_1_1_controller_af51e765c5b938dbce2e652276f94f685}} 
+void {\bfseries set\+Manager} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_controller}{Controller}} $>$ manager)
+\item 
+\mbox{\Hypertarget{classrobots_1_1_controller_a759760ffe52d11c1349f705663a0ca6b}\label{classrobots_1_1_controller_a759760ffe52d11c1349f705663a0ca6b}} 
+std\+::weak\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_controller}{Controller}} $>$ {\bfseries get\+Manager} ()
+\item 
+\mbox{\Hypertarget{classrobots_1_1_controller_ab87b19b9f8cc9584b70be0954d202152}\label{classrobots_1_1_controller_ab87b19b9f8cc9584b70be0954d202152}} 
+void {\bfseries scan} ()
+\item 
+\mbox{\Hypertarget{classrobots_1_1_controller_adf19530f84d029196b50af3d16578689}\label{classrobots_1_1_controller_adf19530f84d029196b50af3d16578689}} 
+std\+::stack$<$ \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} $>$ {\bfseries make\+Route} (const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&from, const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&to)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classrobots_1_1_controller_adeaa9066e280d401caceacf54affd5f7}\label{classrobots_1_1_controller_adeaa9066e280d401caceacf54affd5f7}} 
+static std\+::stack$<$ \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} $>$ {\bfseries make\+Route} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map}{Map}} $>$ map, unsigned radius, const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&from, const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&to)
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Controller.\+h\item 
+Controller.\+cpp\end{DoxyCompactItemize}

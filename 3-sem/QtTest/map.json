@@ -1,0 +1,40 @@
+{
+  "width": 10,
+  "height": 10,
+  "objects": [
+    {
+      "type": "obstacle",
+      "x": 1,
+      "y": 2
+    },
+    {
+      "type": "interest-point",
+      "x": 9,
+      "y": 3
+    },
+    {
+      "type": "command-center",
+      "x": 2,
+      "y": 2,
+      "consumption": 100,
+      "slots_num": 4,
+      "price": 1000
+    },
+    {
+      "type": "robot",
+      "x": 5,
+      "y": 3,
+      "consumption": 100,
+      "slots_num": 4,
+      "price": 200
+    },
+    {
+      "type": "robot-commander",
+      "x": 3,
+      "y": 8,
+      "consumption": 100,
+      "slots_num": 4,
+      "price": 500
+    }
+  ]
+}

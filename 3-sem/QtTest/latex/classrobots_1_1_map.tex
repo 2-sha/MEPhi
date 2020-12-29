@@ -1,0 +1,106 @@
+\hypertarget{classrobots_1_1_map}{}\doxysection{robots\+::Map Class Reference}
+\label{classrobots_1_1_map}\index{robots::Map@{robots::Map}}
+
+
+Describes the environment and objects on the field.  
+
+
+
+
+{\ttfamily \#include $<$Map.\+h$>$}
+
+Inheritance diagram for robots\+::Map\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classrobots_1_1_map}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classrobots_1_1_map_a311b85571ad79217b054ba02aeb202a3}\label{classrobots_1_1_map_a311b85571ad79217b054ba02aeb202a3}} 
+{\bfseries Map} (const unsigned width=0, const unsigned height=0)
+\item 
+\mbox{\Hypertarget{classrobots_1_1_map_ac42dffdca9af2afd57989c5e5ba61c4c}\label{classrobots_1_1_map_ac42dffdca9af2afd57989c5e5ba61c4c}} 
+unsigned {\bfseries get\+Width} () const
+\item 
+\mbox{\Hypertarget{classrobots_1_1_map_acf678f3dc708e949aa6326c3984d1afc}\label{classrobots_1_1_map_acf678f3dc708e949aa6326c3984d1afc}} 
+unsigned {\bfseries get\+Height} () const
+\item 
+bool \mbox{\hyperlink{classrobots_1_1_map_af9fbee3adbbf0d5b80b00fbd2849c5c7}{is\+On\+Map}} (const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&pos) const
+\begin{DoxyCompactList}\small\item\em Checks, if objects in limits of map. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map_object}{Map\+Object}} $>$ \mbox{\hyperlink{classrobots_1_1_map_a229f0e9fd5d3278c4a1063c0ba2605ee}{get\+Object}} (const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&pos)
+\begin{DoxyCompactList}\small\item\em Get const object by its coordinates. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classrobots_1_1_map_aa313894190420998f077fbcbea1757b3}\label{classrobots_1_1_map_aa313894190420998f077fbcbea1757b3}} 
+std\+::unordered\+\_\+map$<$ \mbox{\hyperlink{structrobots_1_1_coord}{Coord}}, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map_object}{Map\+Object}} $>$ $>$ {\bfseries get\+Objects\+List} ()
+\item 
+{\footnotesize template$<$typename Object\+Type , typename ... Args, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+base\+\_\+of\+\_\+v$<$\+Map\+Object, Object\+Type$>$$>$$>$ }\\std\+::shared\+\_\+ptr$<$ Object\+Type $>$ \mbox{\hyperlink{classrobots_1_1_map_a633ff5a37eaebe1d46d3a91c3dec93ef}{add\+Object}} (const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&pos, Args \&\&... args)
+\begin{DoxyCompactList}\small\item\em Simple objects factory, which create objects and attach them to map. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Describes the environment and objects on the field. 
+
+Through this class you can add objects, get them and interact 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classrobots_1_1_map_a633ff5a37eaebe1d46d3a91c3dec93ef}\label{classrobots_1_1_map_a633ff5a37eaebe1d46d3a91c3dec93ef}} 
+\index{robots::Map@{robots::Map}!addObject@{addObject}}
+\index{addObject@{addObject}!robots::Map@{robots::Map}}
+\doxysubsubsection{\texorpdfstring{addObject()}{addObject()}}
+{\footnotesize\ttfamily template$<$typename Object\+Type , typename ... Args, typename  = std\+::enable\+\_\+if\+\_\+t$<$std\+::is\+\_\+base\+\_\+of\+\_\+v$<$\+Map\+Object, Object\+Type$>$$>$$>$ \\
+std\+::shared\+\_\+ptr$<$Object\+Type$>$ robots\+::\+Map\+::add\+Object (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&}]{pos,  }\item[{Args \&\&...}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Simple objects factory, which create objects and attach them to map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & Position of object on map \\
+\hline
+{\em args} & Parameters to be passed to the object constructor \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+shared\+\_\+ptr to the const created object
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & If object is out of map or the position is busy \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classrobots_1_1_map_a229f0e9fd5d3278c4a1063c0ba2605ee}\label{classrobots_1_1_map_a229f0e9fd5d3278c4a1063c0ba2605ee}} 
+\index{robots::Map@{robots::Map}!getObject@{getObject}}
+\index{getObject@{getObject}!robots::Map@{robots::Map}}
+\doxysubsubsection{\texorpdfstring{getObject()}{getObject()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map_object}{robots\+::\+Map\+Object}} $>$ robots\+::\+Map\+::get\+Object (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&}]{pos }\end{DoxyParamCaption})}
+
+
+
+Get const object by its coordinates. 
+
+\begin{DoxyReturn}{Returns}
+shared\+\_\+ptr to the const object or nullptr if it\textquotesingle{}s not found 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classrobots_1_1_map_af9fbee3adbbf0d5b80b00fbd2849c5c7}\label{classrobots_1_1_map_af9fbee3adbbf0d5b80b00fbd2849c5c7}} 
+\index{robots::Map@{robots::Map}!isOnMap@{isOnMap}}
+\index{isOnMap@{isOnMap}!robots::Map@{robots::Map}}
+\doxysubsubsection{\texorpdfstring{isOnMap()}{isOnMap()}}
+{\footnotesize\ttfamily bool robots\+::\+Map\+::is\+On\+Map (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&}]{pos }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Checks, if objects in limits of map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & Position of the object being checked \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Map.\+h\item 
+Map.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,74 @@
+\hypertarget{classrobots_1_1_map_object}{}\doxysection{robots\+::Map\+Object Class Reference}
+\label{classrobots_1_1_map_object}\index{robots::MapObject@{robots::MapObject}}
+
+
+Base class, which must be inherited by concrete map objects.  
+
+
+
+
+{\ttfamily \#include $<$Map\+Object.\+h$>$}
+
+Inheritance diagram for robots\+::Map\+Object\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.500000cm]{classrobots_1_1_map_object}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classrobots_1_1_map_object_aa93800ccf22c3c60c48f55dad014c811}\label{classrobots_1_1_map_object_aa93800ccf22c3c60c48f55dad014c811}} 
+{\bfseries Map\+Object} (const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&pos=\{ 0, 0 \}, std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map}{Map}} $>$ map=nullptr)
+\item 
+void \mbox{\hyperlink{classrobots_1_1_map_object_ab3d3a9d6d916c4ab230e3da73bcf4691}{set\+Pos}} (const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&pos)
+\begin{DoxyCompactList}\small\item\em Updates object position. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classrobots_1_1_map_object_a297dfa8d247d18905c7f2c656af355bd}\label{classrobots_1_1_map_object_a297dfa8d247d18905c7f2c656af355bd}} 
+\mbox{\hyperlink{structrobots_1_1_coord}{Coord}} {\bfseries get\+Pos} () const
+\item 
+\mbox{\Hypertarget{classrobots_1_1_map_object_a7b0ecc9b7ec3e161c1372c7d5887ebbd}\label{classrobots_1_1_map_object_a7b0ecc9b7ec3e161c1372c7d5887ebbd}} 
+void {\bfseries attach\+To\+Map} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map}{Map}} $>$ map, const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&pos)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classrobots_1_1_map_object_a60a648080a6f7c6113525f7a8eb419e7}\label{classrobots_1_1_map_object_a60a648080a6f7c6113525f7a8eb419e7}} 
+\mbox{\hyperlink{structrobots_1_1_coord}{Coord}} {\bfseries pos\+\_\+}
+\item 
+\mbox{\Hypertarget{classrobots_1_1_map_object_ab69c444a8b6cbf2942694553c99f1464}\label{classrobots_1_1_map_object_ab69c444a8b6cbf2942694553c99f1464}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classrobots_1_1_map}{Map}} $>$ {\bfseries map\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Base class, which must be inherited by concrete map objects. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classrobots_1_1_map_object_ab3d3a9d6d916c4ab230e3da73bcf4691}\label{classrobots_1_1_map_object_ab3d3a9d6d916c4ab230e3da73bcf4691}} 
+\index{robots::MapObject@{robots::MapObject}!setPos@{setPos}}
+\index{setPos@{setPos}!robots::MapObject@{robots::MapObject}}
+\doxysubsubsection{\texorpdfstring{setPos()}{setPos()}}
+{\footnotesize\ttfamily void robots\+::\+Map\+Object\+::set\+Pos (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structrobots_1_1_coord}{Coord}} \&}]{pos }\end{DoxyParamCaption})}
+
+
+
+Updates object position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & New object position\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::out\+\_\+of\+\_\+range} & If new position is out of field \\
+\hline
+{\em std\+::invalid\+\_\+argument} & If new position is busy by another object \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Map\+Object.\+h\item 
+Map\+Object.\+cpp\end{DoxyCompactItemize}

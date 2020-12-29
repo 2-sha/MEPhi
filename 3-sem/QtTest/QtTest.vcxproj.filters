@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;qml;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Header Files\Map">
+      <UniqueIdentifier>{131526ed-5779-4e3a-8f67-60fa79608350}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Map\Objects">
+      <UniqueIdentifier>{ca2ce38f-0ea5-451d-9a0e-6988b39daf83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Map\Modules">
+      <UniqueIdentifier>{efdb2547-3b65-4b04-8a04-0380d7e14761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{3c118699-b199-4de5-9144-0b15e8d7221e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{3a6ff30a-abfb-4ff2-99a0-d82dc2fced8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Game">
+      <UniqueIdentifier>{a7001ccc-3d3c-4619-a6a1-6e32a4f0a789}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Map">
+      <UniqueIdentifier>{56c64f7c-9e13-42e7-80dc-108d2b7ca06c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Map\Modules">
+      <UniqueIdentifier>{fd9621b5-cc9c-4136-b12a-fa02f583f600}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Map\Objects">
+      <UniqueIdentifier>{55725165-cf7a-458e-af68-6c28bc1b158c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Map\Modules\Requests">
+      <UniqueIdentifier>{1b980234-40ab-4ddf-959b-a28623742d14}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <QtRcc Include="qml.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+    <ClCompile Include="Backend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Source Files\Map\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="MapLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapObject.cpp">
+      <Filter>Source Files\Map\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform.cpp">
+      <Filter>Source Files\Map\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Robot.cpp">
+      <Filter>Source Files\Map\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Generator.cpp">
+      <Filter>Source Files\Map\Modules</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapObject.h">
+      <Filter>Header Files\Map\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>Header Files\Map\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandCenter.h">
+      <Filter>Header Files\Map\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.h">
+      <Filter>Header Files\Map\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Module.h">
+      <Filter>Header Files\Map\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Coord.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Robot.h">
+      <Filter>Header Files\Map\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="RobotCommander.h">
+      <Filter>Header Files\Map\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="InterestPoint.h">
+      <Filter>Header Files\Map\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Generator.h">
+      <Filter>Header Files\Map\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>Header Files\Map\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="MapLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratorRequest.h">
+      <Filter>Header Files\Map\Modules\Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerRequest.h">
+      <Filter>Header Files\Map\Modules\Requests</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseRequest.h">
+      <Filter>Header Files\Map\Modules\Requests</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Main.qml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Field.qml">
+      <Filter>Resource Files\Game</Filter>
+    </None>
+    <None Include="SpriteBlock.qml">
+      <Filter>Resource Files\Game</Filter>
+    </None>
+    <None Include="map.json">
+      <Filter>Config</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Backend.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+</Project>
