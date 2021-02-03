@@ -2,12 +2,11 @@
     <qresource prefix="/">
         <file>Field.qml</file>
         <file>Main.qml</file>
-        <file>SpriteBlock.qml</file>
         <file>img/background.png</file>
         <file>img/obstacle.png</file>
-        <file>img/robot.png</file>
-        <file>img/robot-commander.png</file>
         <file>img/command-center.png</file>
         <file>img/interest-point.png</file>
+        <file>img/robot.png</file>
+        <file>img/robot-commander.png</file>
     </qresource>
 </RCC>

@@ -1,11 +1,18 @@
 #include "Controller.h"
 #include "ControllerRequest.h"
+#include "SensorRequest.h"
 #include "Robot.h"
 #include "Coord.h"
+#include "Obstacle.h"
+#include "CommandCenter.h"
+
+#include <queue>
+
+#include <QDebug>
 
 bool robots::Controller::work(BaseRequest& request)
 {
-	if (typeid(request) == typeid(ScanRequest))
+	if (typeid(request) == typeid(FindControllersRequest))
 	{
 		scan();
 		return true;
@@ -18,7 +25,22 @@ bool robots::Controller::work(BaseRequest& request)
 			ConnectRequest& connectRequest = static_cast<ConnectRequest&>(request);
 			connectRequest.connect(host_);
 			setManager(connectRequest.getSender());
+			// TODO: Merge visited
 		}
+		return true;
+	}
+
+	if (typeid(request) == typeid(InitExplorationRequest))
+	{
+		initExploration();
+		return true;
+	}
+
+	if (typeid(request) == typeid(ExploreRequest))
+	{
+		explore();
+		if (!hasTask())
+			static_cast<ExploreRequest&>(request).endExplore();
 		return true;
 	}
 
@@ -33,62 +55,47 @@ void robots::Controller::scan()
 	if (!map)
 		throw std::runtime_error("Platform is not attached to map");
 
-	Coord pos = host_->getPos();
-	for (unsigned i = std::max(0, static_cast<int>(pos.x) - static_cast<int>(actionRange_)); i <= std::min(pos.x + actionRange_, map->getWidth() - 1); i++)
-	{
-		int hRadius = actionRange_ - abs(static_cast<int>(i) - static_cast<int>(pos.x));
-		for (unsigned j = std::max(0, static_cast<int>(pos.y) - hRadius); j <= std::min(pos.y + hRadius, map->getHeight() - 1); j++)
+	map->exploreInRadius(host_->getPos(), actionRange_, [&](const Coord& pos, std::shared_ptr<MapObject> obj) {
+
+		auto platform = std::dynamic_pointer_cast<Platform>(obj);
+		if (!platform || robotsNum_ == maxRobotsNum_)
+			return;
+
+		ConnectRequest request(shared_from_this());
+		platform->dispatch(request);
+		bool isObjectAdd;
+		auto res = request.result();
+		// If connection is success
+		if (res != nullptr)
 		{
-			if (i == pos.x && j == pos.y)
-				continue;
-			auto obj = std::dynamic_pointer_cast<Platform>(map->getObject({ i, j }));
-			if (!obj)
-				continue;
-
-			ConnectRequest request(shared_from_this());
-			obj->dispatch(request);
-			bool isObjectAdd;
-			auto platform = request.result();
-			// If connection is success
-			if (platform != nullptr)
-			{
-				inferiors_.push_back(platform);
-				robotsNum_++;
-				isObjectAdd = true;
-			}
-
-			auto robot = std::dynamic_pointer_cast<Robot>(obj);
-			if (robot && robot->getManager().lock() == nullptr)
-			{
-				robots_.push_back(robot);
-				robot->setManager(shared_from_this());
-				if (!isObjectAdd)
-					robotsNum_++;
-				isObjectAdd = true;
-			}
-
-			if (robotsNum_ == maxRobotsNum_)
-				return;
+			inferiors_.push_back(res);
+			robotsNum_++;
+			isObjectAdd = true;
 		}
-	}
+
+		auto robot = std::dynamic_pointer_cast<Robot>(platform);
+		if (robot && robot->getManager().lock() == nullptr)
+		{
+			robots_.push_back(robot);
+			robot->setManager(shared_from_this());
+			if (!isObjectAdd)
+				robotsNum_++;
+			isObjectAdd = true;
+		}
+
+	});
 
 	for (auto inferiror : inferiors_)
-		inferiror.lock()->dispatch(ScanRequest());
+		inferiror.lock()->dispatch(FindControllersRequest());
 }
 
-std::stack<robots::Coord> robots::Controller::makeRoute(const Coord& from, const Coord& to)
+std::stack<robots::Coord> robots::Controller::makeRoute(const Coord& start, const Coord& end)
 {
 	if (!host_)
 		throw std::runtime_error("Module is not attached to platform");
 	auto map = getMap();
 	if (!map)
 		throw std::runtime_error("Platform is not attached to map");
-
-	return makeRoute(map, actionRange_, from, to);
-}
-
-std::stack<robots::Coord> robots::Controller::makeRoute(std::shared_ptr<Map> map, unsigned radius, const Coord& start, const Coord& end)
-{
 	if (map->getObject(end) != nullptr)
 		return {};
 
@@ -97,7 +104,8 @@ std::stack<robots::Coord> robots::Controller::makeRoute(std::shared_ptr<Map> map
 	std::queue<Coord> pointsToVisit;
 
 	auto tryAddPoint = [&](const Coord& from, const Coord &to) {
-		if (map->isOnMap(to) && map->getObject(to) == nullptr && visited.find(to) == visited.end() && start.calcDist(to) <= radius)
+		if (map->isOnMap(to) && visited.find(to) == visited.end() && !busyFields_.contains(to)
+			&& host_->getPos().calcDist(to) <= this->getActionRange())
 		{
 			pointsToVisit.push(to);
 			prev[to] = from;
@@ -131,6 +139,84 @@ std::stack<robots::Coord> robots::Controller::makeRoute(std::shared_ptr<Map> map
 		cur = prev[cur];
 	}
 	route.push(cur);
+	route.pop();
 
 	return route;
+}
+
+void robots::Controller::initExploration()
+{
+	if (!host_)
+		throw std::runtime_error("Module is not attached to platform");
+	auto map = getMap();
+	if (!map)
+		throw std::runtime_error("Platform is not attached to map");
+
+	map->exploreInRadius(host_->getPos(), actionRange_, [&](const Coord& pos, std::shared_ptr<MapObject> obj) {
+		//if (!map->explored.contains(pos) && obj == nullptr)
+		//toExplore_[pos] = true;
+		toExplore_.insert(pos);
+	});
+}
+
+void robots::Controller::explore()
+{
+	if (!this->hasTask())
+		return;
+	auto& explored = getMap()->explored;
+	auto& visited = getMap()->visited;
+	for (auto robot : robots_)
+	{
+		auto robotPtr = robot.lock();
+
+		toExplore_.erase(robotPtr->getPos());
+		visited.insert(robotPtr->getPos());
+		explored.insert(robotPtr->getPos());
+
+		auto sr = ScanRequest();
+		robotPtr->dispatch(sr);
+		for (const auto &[pos, obj] : sr.getObjects())
+		{
+			explored.insert(pos);
+			if (obj == nullptr)
+				continue;
+			if (typeid(*obj) == typeid(Obstacle) || typeid(*obj) == typeid(CommandCenter))
+			{
+				toExplore_.erase(pos);
+				busyFields_.insert(pos);
+			}
+		}
+
+		qDebug() << "Pos: " << robotPtr->getPos();
+		qDebug() << "Remained: " << toExplore_.size();
+
+		Coord curPos = robotPtr->getPos();
+		std::unordered_set<Coord, bool>::iterator target = toExplore_.end();
+		unsigned minDist = UINT32_MAX;
+		for (auto it = toExplore_.begin(); it != toExplore_.end(); it++)
+		{
+			if (visited.contains(*it))
+				continue;
+			unsigned dist = curPos.calcDist(*it);
+			if (dist < minDist)
+			{
+				minDist = dist;
+				target = it;
+			}
+		}
+
+		if (target != toExplore_.end())
+		{
+			auto route = makeRoute(curPos, *target);
+			// If we can't build route to this point, we mark it as unreachable
+			if (!route.empty())
+			{
+				robotPtr->setRoute(route);
+				robotPtr->move();
+			}
+			else
+				toExplore_.erase(*target);
+		}
+	}
+	qDebug();
 }

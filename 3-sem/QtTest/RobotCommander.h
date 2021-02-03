@@ -11,8 +11,7 @@ namespace robots
 		RobotCommander(
 			const unsigned consumption,
 			const unsigned slotsNum,
-			const unsigned price,
-			const std::string& description = ""
-		) : Robot(consumption, slotsNum, price, description) {};
+			const unsigned price
+		) : Robot(consumption, slotsNum, price) {};
 	};
 }

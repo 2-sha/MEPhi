@@ -7,12 +7,23 @@
 #include <any>
 #include <optional>
 
+/**
+* @defgroup Module
+*
+* @brief Modules can be installed on platforms and controll it
+*/
+
 namespace robots
 {
 	class Platform;
 	class BaseRequest;
 	class Map;
 
+	/**
+	* @ingroup Module
+	*
+	* @brief Base class for all types of modules
+	*/
 	class Module
 	{
 	protected:
@@ -38,9 +49,18 @@ namespace robots
 		inline bool isOn() const { return isOn_; }
 
 		inline unsigned getConsumption() const { return consumption_; }
+		inline unsigned getPrice() const { return price_; }
 
 		inline void attachToPlatform(std::shared_ptr<Platform> host) { host_ = host; }
 
+		/**
+		* @brief Handle request
+		* @details If module can handle this type of request, it returns true and do some work. 
+		           It implements pattern "chain"
+		*
+		* @param request Request, which be handle
+		* @return true if module can handle the request, false if can't
+		*/
 		virtual bool work(BaseRequest& request) { return false; }
 	};
 }

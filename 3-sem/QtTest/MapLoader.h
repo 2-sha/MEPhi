@@ -5,15 +5,6 @@
 #include <QJsonArray>
 #include <QFile>
 
-#include "Coord.h"
-#include "Map.h"
-#include "Obstacle.h"
-#include "InterestPoint.h"
-#include "CommandCenter.h"
-#include "Robot.h"
-#include "RobotCommander.h"
-#include "Module.h"
-
 #include <memory>
 #include <string>
 #include <vector>
@@ -21,6 +12,10 @@
 
 namespace robots
 {
+    class Map;
+    class Module;
+    class Platform;
+
     /**
     * @ingroup Backend
     * 

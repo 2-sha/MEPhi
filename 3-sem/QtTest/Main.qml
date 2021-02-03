@@ -93,6 +93,7 @@ ApplicationWindow {
         size: 10
         block_size: 60
         map: Backend.map
+        explored: Backend.explored
         visible: Backend.isMapLoaded
     }
 
@@ -131,8 +132,15 @@ ApplicationWindow {
                 RowLayout {
                     spacing: 10
 
-                    ControlButton { text: "Старт" }
-                    ControlButton { text: "Заново" }
+                    ControlButton { 
+                        text: Backend.isPlaying ? "Стоп" : "Старт"
+                        enabled: Backend.isMapLoaded
+                        onClicked: Backend.changeGameStatus();
+                    }
+                    ControlButton { 
+                        text: "Заново"
+                        enabled: Backend.isMapLoaded
+                    }
                 }
             }
 
@@ -161,8 +169,11 @@ ApplicationWindow {
 
                 ColumnLayout {
                     DataLine { paramText: 'Найдено'; valueText: '1/4' }
-                    DataLine { paramText: 'Исследовано'; valueText: '38/100' }
-                    DataLine { paramText: 'Бюджет'; valueText: '1500' }
+                    DataLine { 
+                        paramText: 'Исследовано'; 
+                        valueText: Backend.isMapLoaded ? Object.keys(Backend.explored).length + '/' + 100 : '-/-';
+                    }
+                    DataLine { paramText: 'Бюджет'; valueText: Backend.isMapLoaded ? Backend.budget : '-' }
                 }
                 
             }

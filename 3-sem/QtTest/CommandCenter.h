@@ -11,8 +11,7 @@ namespace robots
 		CommandCenter(
 			unsigned consumption,
 			unsigned slotsNum,
-			unsigned price,
-			const std::string& description = ""
-		) : Platform(consumption, slotsNum, price, description) {};
+			unsigned price
+		) : Platform(consumption, slotsNum, price) {};
 	};
 }

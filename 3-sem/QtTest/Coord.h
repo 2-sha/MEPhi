@@ -2,6 +2,9 @@
 
 #include <string>
 #include <math.h>
+#include <iostream>
+
+#include <QDebug>
 
 namespace robots
 {
@@ -19,7 +22,14 @@ namespace robots
 
 		inline unsigned calcDist(const Coord& to) const
 		{
-			return ceil(sqrt(pow((int)x - (int)to.x, 2) + pow((int)y - (int)to.y, 2)));
+			return abs((int)x - (int)to.x) + abs((int)y - (int)to.y);
+		}
+
+		template<class T>
+		inline friend T& operator<< (T& out, const Coord& point)
+		{
+			out << "(" << point.x << "; " << point.y << ")";
+			return out;
 		}
 	};
 }

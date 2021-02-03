@@ -6,13 +6,19 @@ void robots::Robot::move()
 		return;
 	try
 	{
+
 		setPos(route_.top());
 	}
-	catch (std::exception& ex)
+	catch (std::invalid_argument& ex)
 	{
-		// Clear the queue
-		std::swap(route_, std::stack<Coord>());
-		throw ex;
+		// If position is busy, another robot can be there, so we just wait
+		return;
 	}
+	//catch (std::exception& ex)
+	//{
+	//	// Clear the queue
+	//	std::swap(route_, std::stack<Coord>());
+	//	throw ex;
+	//}
 	route_.pop();
 }

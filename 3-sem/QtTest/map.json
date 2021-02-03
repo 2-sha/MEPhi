@@ -4,37 +4,98 @@
   "objects": [
     {
       "type": "obstacle",
-      "x": 1,
-      "y": 2
-    },
-    {
-      "type": "interest-point",
-      "x": 9,
+      "x": 6,
       "y": 3
     },
     {
+      "type": "obstacle",
+      "x": 7,
+      "y": 4
+    },
+    {
+      "type": "interest-point",
+      "x": 5,
+      "y": 3
+    },
+    {
+      "type": "obstacle",
+      "x": 6,
+      "y": 5
+    },
+    {
+      "type": "obstacle",
+      "x": 5,
+      "y": 4
+    },
+    {
       "type": "command-center",
-      "x": 2,
-      "y": 2,
+      "x": 4,
+      "y": 4,
+      "modules": [
+        {
+          "type": "generator",
+          "priority": 1,
+          "energy": 250,
+          "price": 100
+        },
+        {
+          "type": "controller",
+          "priority": 1,
+          "max_robots_num": 3,
+          "range": 5,
+          "consumption": 100,
+          "price": 300
+        }
+      ],
       "consumption": 100,
       "slots_num": 4,
       "price": 1000
     },
     {
       "type": "robot",
-      "x": 5,
-      "y": 3,
+      "x": 2,
+      "y": 4,
       "consumption": 100,
       "slots_num": 4,
-      "price": 200
+      "price": 200,
+      "modules": [
+        {
+          "type": "generator",
+          "priority": 1,
+          "energy": 250,
+          "price": 100
+        },
+        {
+          "type": "sensor",
+          "priority": 1,
+          "radius": 1,
+          "consumption": 100,
+          "price": 300
+        }
+      ]
     },
     {
-      "type": "robot-commander",
-      "x": 3,
-      "y": 8,
+      "type": "robot",
+      "x": 4,
+      "y": 9,
       "consumption": 100,
       "slots_num": 4,
-      "price": 500
+      "price": 200,
+      "modules": [
+        {
+          "type": "generator",
+          "priority": 1,
+          "energy": 250,
+          "price": 100
+        },
+        {
+          "type": "sensor",
+          "priority": 1,
+          "radius": 1,
+          "consumption": 100,
+          "price": 300
+        }
+      ]
     }
   ]
 }

@@ -22,9 +22,8 @@ namespace robots
 		Robot(
 			unsigned consumption,
 			unsigned slotsNum,
-			unsigned price,
-			const std::string& description = ""
-		) : Platform(consumption, slotsNum, price, description) {};
+			unsigned price
+		) : Platform(consumption, slotsNum, price) {};
 
 		inline void setManager(std::shared_ptr<Controller> manager) { manager_ = manager; }
 		inline std::weak_ptr<Controller> getManager() { return manager_; }

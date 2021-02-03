@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <numeric>
 #include <memory>
-#include <string>
 #include <vector>
 #include <any>
 #include <optional>
@@ -23,22 +22,21 @@ namespace robots
 	class Platform : public MapObject, public std::enable_shared_from_this<Platform>
 	{
 	private:
-		std::string description_;
 		unsigned platformConsumption_;
 		unsigned slotsNum_;
-		unsigned price_;
+		unsigned allPrice_;
+		unsigned platformPrice_;
 		unsigned allConsumption_;
 		unsigned energyLevel_;
 		std::vector<std::shared_ptr<Module>> modules_;
 
 	public:
-		Platform( 
+		Platform(
 			const unsigned consumption,
 			const unsigned slotsNum,
-			const unsigned price,
-			const std::string& description = ""
+			const unsigned price
 		) : MapObject(), platformConsumption_(consumption), allConsumption_(consumption), slotsNum_(slotsNum),
-			price_(price), description_(description), energyLevel_(0) {};
+			platformPrice_(price), allPrice_(price), energyLevel_(0) {};
 
 		/**
 		* @brief Sort modules by their priority and recalculate summary consumption and energy level
@@ -50,9 +48,16 @@ namespace robots
 		/**
 		* @brief Get summary energy and consumption levels
 		*
-		* @return std::pai with consumption level as first param and energy level as second
+		* @return std::pair with consumption level as first param and energy level as second
 		*/
 		std::pair<unsigned, unsigned> getEnergyStatus() const { return { allConsumption_, energyLevel_ }; }
+
+		/**
+		* @brief Determine, can platform work or not (cause of energy level)
+		*
+		* @return true or false
+		*/
+		inline bool isWork() const { return platformConsumption_ <= energyLevel_; }
 
 		/**
 		* @brief Send given query to modules and return answer
@@ -60,11 +65,20 @@ namespace robots
 		*          Implements pattern Chain of Responsibility and Command in ModuleRequest.
 		*
 		* @param request It can be any class, which inherits ModuleRequest class
-		* @return false, if request was not proccessed, and true if some handler catch it
+		* @return false, if request was not proccessed or platform is not working, and true if some handler catch it
 		*/
 		bool dispatch(BaseRequest& request);
 
 		std::vector<std::shared_ptr<Module>> getModules() { return modules_; }
+
+		inline unsigned getSlotsNum() const { return slotsNum_; }
+
+		/**
+		* @brief Calculate price of platform and installed modules
+		*
+		* @return Calculated price
+		*/
+		unsigned calcPrice();
 
 		/**
 		* @brief Simple objects factory, which create modules and attach them to platform
